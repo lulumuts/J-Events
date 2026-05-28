@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Reveal from './Reveal';
 import { categories, projects } from '../data/projects';
+import { assetUrl } from '../utils/assetUrl';
 
 const CameraIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -41,7 +42,7 @@ export default function Portfolio() {
               <Link className="bm-work-item bm-work-link" to={`/work/${item.slug}`}>
                 <div className="bm-work-img">
                   {item.image ? (
-                    <img src={item.image} alt={item.imageAlt ?? item.title} />
+                    <img src={assetUrl(item.image)} alt={item.imageAlt ?? item.title} />
                   ) : (
                     <CameraIcon />
                   )}

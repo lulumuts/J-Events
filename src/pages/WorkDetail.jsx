@@ -4,6 +4,7 @@ import Section from '../components/Section';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { projects } from '../data/projects';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function WorkDetail() {
   const { slug } = useParams();
@@ -60,7 +61,7 @@ export default function WorkDetail() {
                     <div className="bm-work-img">
                       {project.image ? (
                         <img
-                          src={project.image}
+                          src={assetUrl(project.image)}
                           alt={project.imageAlt ?? project.title}
                         />
                       ) : (
