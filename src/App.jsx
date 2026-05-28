@@ -4,9 +4,11 @@ import WorkDetail from './pages/WorkDetail';
 import About from './pages/About';
 import Book from './pages/Book';
 
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, '') || undefined;
+
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={routerBasename}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
