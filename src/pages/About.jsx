@@ -1,37 +1,43 @@
 import { Link } from 'react-router-dom';
 import Reveal from '../components/Reveal';
-import Nav from '../components/Nav';
-import Footer from '../components/Footer';
 import Section from '../components/Section';
 import aboutPlaceholder from '../assets/vite.svg';
 
 export default function About() {
   return (
-    <div className="bm">
-      <main className="bm-main">
+    <div className="bm bm-about-root">
+      <main className="bm-main bm-about-main">
         <Section className="bm-section--white bm-work-detail-page bm-about-page">
-          <Nav />
+          <div className="bm-about-topbar">
+            <Link to="/" className="bm-backlink bm-about-fablink" aria-label="Back to home">
+              <span className="bm-about-fablink-stack" aria-hidden="true">
+                <span className="bm-about-fablink-layer bm-about-fablink-layer--default">← Back to home</span>
+                <span className="bm-about-fablink-layer bm-about-fablink-layer--title">← Back to home</span>
+              </span>
+            </Link>
+          </div>
           <div className="bm-hero">
             <div className="bm-hero-inner">
               <div className="bm-work-detail">
                 <Reveal type="left">
                   <div className="bm-about-leftcol">
                     <h1 className="bm-h1 bm-about-title">About</h1>
-                    <p className="bm-body">
-                      J Ideas &amp; Management is built on thoughtful planning, creative direction,
-                      and seamless execution — focused on the experience from start to finish.
+                    <p className="bm-about-text">
+                      I&apos;m Jordan — a freelance events and project manager based in Amsterdam,
+                      with over a decade of experience bringing live and virtual experiences to life.
+                      From intimate brand launches to flagship summits drawing thousands of registrants,
+                      I handle everything from the first concept call to the final curtain.
                     </p>
-                    <p className="bm-work-detail-desc">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-                      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                      nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    <p className="bm-about-text">
+                      My background spans conference production, community building, content strategy
+                      and speaker management — so when I come on board, I bring a joined-up view of
+                      what makes an event actually work. I care about the detail, the delegate
+                      experience, and whether the whole thing lands the way you imagined it.
                     </p>
-                    <p className="bm-work-detail-desc">
-                      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                      fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                      culpa qui officia deserunt mollit anim id est laborum.
+                    <p className="bm-about-text">
+                      Whether you&apos;re launching something new or levelling up an existing event,
+                      I&apos;d love to hear about it.
                     </p>
-
                   </div>
                 </Reveal>
 
@@ -44,16 +50,8 @@ export default function About() {
             </div>
           </div>
 
-          <Link to="/" className="bm-backlink bm-about-fablink">
-            ← Back to home
-          </Link>
-        </Section>
-
-        <Section className="bm-section--footer">
-          <Footer />
         </Section>
       </main>
     </div>
   );
 }
-

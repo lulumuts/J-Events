@@ -1,37 +1,77 @@
-import { useScrollReveal, useCountUp } from '../hooks/useScrollReveal';
-import Reveal from './Reveal';
+import { useEffect, useState } from 'react';
+import { useStatsSectionReveal } from '../hooks/useScrollReveal';
+import nowYouKnowLogo from '../assets/logos/now-you-know-logo.png';
+import roundhouseLogo from '../assets/logos/roundhouse-logo.png';
+import constructionCfoLogo from '../assets/logos/construction-cfo-summit-logo.png';
+import juliesTop5Logo from '../assets/logos/julies-top-5-logo.png';
+import powerWithinYouLogo from '../assets/logos/power-within-you-logo.png';
+import mainStreetEventsLogo from '../assets/logos/main-street-events-logo.png';
+import e3gLogo from '../assets/logos/e3g-logo.png';
+import collectionsLogo from '../assets/logos/collections-logo.png';
+import discomLogo from '../assets/logos/discom-logo.png';
 
-function AnimatedStat({ target, suffix, label, delay }) {
-  const [ref, isVisible] = useScrollReveal({ threshold: 0.5 });
-  const count = useCountUp(target, isVisible);
+const clientLogos = [
+  { src: juliesTop5Logo, alt: "Julie's Top 5 Live" },
+  { src: roundhouseLogo, alt: 'Roundhouse' },
+  { src: constructionCfoLogo, alt: 'Construction CFO Summit' },
+  { src: nowYouKnowLogo, alt: 'Now You Know' },
+  { src: powerWithinYouLogo, alt: 'The Power Within You with Mamta Gera' },
+  { src: mainStreetEventsLogo, alt: 'Main Street Events Limited' },
+  { src: collectionsLogo, alt: 'Collections' },
+  { src: e3gLogo, alt: 'E3G' },
+  { src: discomLogo, alt: 'DisCom' },
+];
 
-  return (
-    <Reveal delay={delay} className="bm-stat-reveal">
-      <div className="bm-stat" ref={ref}>
-        <div className="bm-stat-num">{count}{suffix}</div>
-        <div className="bm-stat-lbl">{label}</div>
-      </div>
-    </Reveal>
-  );
-}
+const logoRows = [
+  clientLogos.slice(0, 3),
+  clientLogos.slice(3, 6),
+  clientLogos.slice(6, 9),
+];
 
-function StaticStat({ value, label, delay }) {
-  return (
-    <Reveal delay={delay} className="bm-stat-reveal">
-      <div className="bm-stat">
-        <div className="bm-stat-num">{value}</div>
-        <div className="bm-stat-lbl">{label}</div>
-      </div>
-    </Reveal>
-  );
-}
+const LOGO_REVEAL_INTERVAL_MS = 200;
 
 export default function Stats() {
+  const [wrapRef, revealed] = useStatsSectionReveal();
+  const [visibleCount, setVisibleCount] = useState(0);
+
+  useEffect(() => {
+    if (!revealed || visibleCount >= clientLogos.length) {
+      return undefined;
+    }
+
+    const delay = visibleCount === 0 ? 0 : LOGO_REVEAL_INTERVAL_MS;
+    const timer = window.setTimeout(() => {
+      setVisibleCount((count) => count + 1);
+    }, delay);
+
+    return () => window.clearTimeout(timer);
+  }, [revealed, visibleCount]);
+
+  let logoIndex = 0;
+
   return (
-    <div className="bm-stats">
-      <AnimatedStat target={120} suffix="+" label="Events done" delay={1} />
-      <StaticStat value="6 yrs" label="Experience" delay={2} />
-      <AnimatedStat target={98} suffix="%" label="Satisfaction" delay={3} />
+    <div ref={wrapRef} className="bm-stats-wrap">
+      <header className="bm-stats-header">
+        <h2 className="bm-stats-title">Worked With</h2>
+      </header>
+      <div className="bm-stats">
+        {logoRows.map((row, rowIndex) => (
+          <div className="bm-stats-row" key={rowIndex}>
+            {row.map((logo) => {
+              logoIndex += 1;
+              const isVisible = logoIndex <= visibleCount;
+              return (
+                <div
+                  className={`bm-stat bm-stat-reveal${isVisible ? ' in' : ''}`}
+                  key={logo.alt}
+                >
+                  <img className="bm-stat-logo-img" src={logo.src} alt={logo.alt} />
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

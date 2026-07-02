@@ -32,6 +32,13 @@ export default function Contact() {
           </Reveal>
         </div>
       </div>
+
+      <div className="bm-contact-footer">
+        <div>
+          <div className="bm-contact-footer-logo">J EVENTS</div>
+          <div className="bm-contact-footer-copy">© 2025 · All rights reserved</div>
+        </div>
+      </div>
     </div>
   );
 }

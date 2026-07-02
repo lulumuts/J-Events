@@ -32,6 +32,62 @@ export function useScrollReveal(options = {}) {
   return [ref, isVisible];
 }
 
+export function useStatsSectionReveal() {
+  const ref = useRef(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+
+    const section = el.closest('.stacking-section');
+    let rafId = 0;
+
+    const show = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        rafId = requestAnimationFrame(() => setRevealed(true));
+      });
+    };
+
+    if (section) {
+      const sync = () => {
+        if (section.classList.contains('stacking-section--active')) {
+          show();
+        }
+      };
+
+      sync();
+      const observer = new MutationObserver(sync);
+      observer.observe(section, { attributes: true, attributeFilter: ['class'] });
+
+      return () => {
+        observer.disconnect();
+        cancelAnimationFrame(rafId);
+      };
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          show();
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.35, rootMargin: '0px' },
+    );
+
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  return [ref, revealed];
+}
+
 export function useCountUp(target, isVisible) {
   const [count, setCount] = useState(0);
 

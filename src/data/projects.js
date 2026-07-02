@@ -1,27 +1,29 @@
 export const projects = [
   {
     slug: 'julies-top-5',
-    title: 'Julies Top 5',
-    meta: 'Black British Anthems · Roundhouse, London',
+    title: "Julie's Top 5 Live: Black British Anthems",
+    meta: 'Roundhouse, London',
     category: 'Social',
     image: 'julies-top-5.png',
-    imageAlt: "Julie's Top 5 Show live on stage with host and guests",
+    imageAlt: "Julie's Top 5 Live on stage with host and guests at the Roundhouse",
     description:
       'A standout event concept exploring Black British anthems—crafted for energy, culture, and community.',
   },
   {
-    slug: 'amelco-xmas-party',
-    title: 'Amelco Xmas Party',
-    meta: 'Corporate · Dec 2024',
-    category: 'Corporate',
-    image: 'amelco-xmas-party.png',
-    imageAlt: 'Amelco Lodge Party event setup with branded backdrop and DJ booth',
+    slug: 'discomcierge-changenow-2026',
+    title: 'DisComCierge x ChangeNow 2026',
+    meta: 'Corporate · ChangeNOW Paris 2026',
+    category: 'Climate',
+    image: 'discomcierge-changenow-2026.png',
+    imageAlt:
+      'DisComCierge team at ChangeNOW 2026 in front of the branded changeNOW exhibition display',
     description:
-      'A festive lodge party with bold branding, immersive lighting, and a polished guest experience from arrival to dance floor.',
+      'On-site concierge and guest experience for DisComCierge at ChangeNOW 2026—supporting delegates across a flagship sustainability summit at the Grand Palais.',
   },
   {
     slug: 'cfo-construction-summit',
-    title: 'CFO Construction Summit',
+    title: 'Construction CFO Summit',
+    titleLines: ['Construction', 'CFO Summit'],
     meta: 'Corporate · Construction Wave',
     category: 'Corporate',
     image: 'cfo-construction-summit.png',
@@ -33,12 +35,43 @@ export const projects = [
     slug: 'state-of-climate-politics-forum',
     title: 'State of Climate Politics Forum',
     meta: 'Corporate · E3G at 20 years',
-    category: 'Corporate',
+    category: 'Climate',
     image: 'state-of-climate-politics-forum.png',
     imageAlt: 'Panel at the State of Climate Politics Forum with E3G branding',
     description:
       'A high-profile policy forum with panel production, branded staging, and a polished experience for speakers and delegates.',
   },
+  {
+    slug: 'now-you-know-launch-party',
+    title: 'Now You Know Launch Party',
+    titleLines: ['Now You Know', 'Launch Party'],
+    meta: 'Social · Launch event',
+    category: 'Social',
+    image: 'NYK-Launch-party.png',
+    imageAlt: 'Guests gathered at the Now You Know launch party in a kitchen venue',
+    description:
+      'A vibrant launch celebration bringing guests together for an unforgettable evening of energy, branding, and seamless event delivery.',
+  },
+  {
+    slug: 'collections',
+    title: 'Collections',
+    meta: 'Social · Collections Capsule @ UNDR',
+    category: 'Social',
+    image: 'collections-event.png',
+    imageAlt: 'Collections Capsule shopping event poster with bold white typography on dark green foliage',
+    description:
+      'A unique shopping event for Collections Capsule at UNDR—curated atmosphere, branding, and guest experience from arrival through the main moment.',
+  },
+  {
+    slug: 'corporate-party-2025',
+    title: 'Corporate Party 2025',
+    meta: 'Corporate · Dec 2025',
+    category: 'Corporate',
+    image: 'Stris-corporate-party.png',
+    imageAlt: 'Guests mingling at a corporate party under suspended Edison bulb lighting',
+    description:
+      'An end-of-year corporate celebration with polished staging, guest experience, and run-of-show from welcome to dance floor.',
+  },
 ];
 
-export const categories = ['All', 'Weddings', 'Corporate', 'Social'];
+export const categories = ['All', 'Climate', 'Corporate', 'Social', 'Project Management'];

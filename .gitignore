@@ -15,6 +15,9 @@ dist-ssr
 .env.*
 !.env.example
 
+# Hero source reel — run npm run optimize:video → public/hero/
+src/assets/CC_FINAL TRAIELR V2.mov
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
