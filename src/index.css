@@ -317,7 +317,7 @@ body {
 #work .bm-sec-title {
   color: var(--bm-btn-orange);
   font-size: var(--bm-sec-title-display);
-  padding-top: clamp(0.75rem, 1.75vh, 1.15rem);
+  padding-top: clamp(2.25rem, 5.25vh, 3.35rem);
   padding-bottom: clamp(0.85rem, 2vh, 1.35rem);
 }
 
