@@ -9,7 +9,7 @@
     "dev:api": "node server/index.mjs",
     "build": "vite build",
     "build:gh-pages": "GH_PAGES=true vite build && cp dist/index.html dist/404.html",
-    "deploy": "npm run build:gh-pages && gh-pages -d dist -t",
+    "deploy": "npm run build:gh-pages && gh-pages -d dist --nojekyll -f",
     "lint": "eslint .",
     "preview": "vite preview",
     "optimize:video": "node scripts/optimize-hero-video.mjs"
