@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useStatsSectionReveal } from '../hooks/useScrollReveal';
 import nowYouKnowLogo from '../assets/logos/now-you-know-logo.png';
 import roundhouseLogo from '../assets/logos/roundhouse-logo.png';
@@ -28,26 +27,13 @@ const logoRows = [
   clientLogos.slice(6, 9),
 ];
 
-const LOGO_REVEAL_INTERVAL_MS = 200;
+clientLogos.forEach(({ src }) => {
+  const img = new Image();
+  img.src = src;
+});
 
 export default function Stats() {
   const [wrapRef, revealed] = useStatsSectionReveal();
-  const [visibleCount, setVisibleCount] = useState(0);
-
-  useEffect(() => {
-    if (!revealed || visibleCount >= clientLogos.length) {
-      return undefined;
-    }
-
-    const delay = visibleCount === 0 ? 0 : LOGO_REVEAL_INTERVAL_MS;
-    const timer = window.setTimeout(() => {
-      setVisibleCount((count) => count + 1);
-    }, delay);
-
-    return () => window.clearTimeout(timer);
-  }, [revealed, visibleCount]);
-
-  let logoIndex = 0;
 
   return (
     <div ref={wrapRef} className="bm-stats-wrap">
@@ -57,18 +43,20 @@ export default function Stats() {
       <div className="bm-stats">
         {logoRows.map((row, rowIndex) => (
           <div className="bm-stats-row" key={rowIndex}>
-            {row.map((logo) => {
-              logoIndex += 1;
-              const isVisible = logoIndex <= visibleCount;
-              return (
-                <div
-                  className={`bm-stat bm-stat-reveal${isVisible ? ' in' : ''}`}
-                  key={logo.alt}
-                >
-                  <img className="bm-stat-logo-img" src={logo.src} alt={logo.alt} />
-                </div>
-              );
-            })}
+            {row.map((logo) => (
+              <div
+                className={`bm-stat bm-stat-reveal${revealed ? ' in' : ''}`}
+                key={logo.alt}
+              >
+                <img
+                  className="bm-stat-logo-img"
+                  src={logo.src}
+                  alt={logo.alt}
+                  loading="eager"
+                  decoding="async"
+                />
+              </div>
+            ))}
           </div>
         ))}
       </div>

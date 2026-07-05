@@ -51,6 +51,10 @@
   pointer-events: none;
 }
 
+.stacking-section--active {
+  pointer-events: auto;
+}
+
 .stacking-section > .bm-section {
   flex: 1 1 auto;
   width: 100%;
@@ -252,7 +256,7 @@
 
 /* ── Work ───────────────────────────────────────────────────────────────── */
 .stacking-section:has(> #work) {
-  --bm-work-card-basis: clamp(8.5rem, 38vw, 13rem);
+  --bm-work-card-basis: clamp(9rem, 42vw, 13rem);
   overflow-x: hidden;
   overflow-y: hidden;
 }
@@ -341,23 +345,21 @@
   min-height: 0;
 }
 
+.stacking-section:has(> #work .bm-work--scrollable) .bm-work-grid > .bm-work-item,
 .stacking-section:has(> #work .bm-work--scrollable) .bm-work-grid > .reveal,
 .stacking-section:has(> #work .bm-work--scrollable) .bm-work-grid > .reveal-scale,
+.stacking-section:has(> #work) .bm-work-grid > .bm-work-item,
 .stacking-section:has(> #work) .bm-work-grid > .reveal,
 .stacking-section:has(> #work) .bm-work-grid > .reveal-scale {
-  flex: 1 1 var(--bm-work-card-basis);
-  min-width: min(100%, var(--bm-work-card-basis));
-  aspect-ratio: var(--bm-work-card-aspect);
-  height: auto;
-  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .stacking-section:has(> #work .bm-work--scrollable) .bm-work-item,
 .stacking-section:has(> #work .bm-work--scrollable) .bm-work-link,
 .stacking-section:has(> #work) .bm-work-item,
 .stacking-section:has(> #work) .bm-work-link {
-  height: 100%;
-  min-height: 0;
+  height: auto;
+  min-height: auto;
 }
 
 /* ── Testimonials ───────────────────────────────────────────────────────── */
