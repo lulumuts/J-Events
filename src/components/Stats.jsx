@@ -43,20 +43,24 @@ export default function Stats() {
       <div className="bm-stats">
         {logoRows.map((row, rowIndex) => (
           <div className="bm-stats-row" key={rowIndex}>
-            {row.map((logo) => (
-              <div
-                className={`bm-stat bm-stat-reveal${revealed ? ' in' : ''}`}
-                key={logo.alt}
-              >
-                <img
-                  className="bm-stat-logo-img"
-                  src={logo.src}
-                  alt={logo.alt}
-                  loading="eager"
-                  decoding="async"
-                />
-              </div>
-            ))}
+            {row.map((logo, colIndex) => {
+              const index = rowIndex * 3 + colIndex;
+
+              return (
+                <div
+                  className={`bm-stat bm-stat-reveal bm-stat-delay-${index + 1}${revealed ? ' in' : ''}`}
+                  key={logo.alt}
+                >
+                  <img
+                    className="bm-stat-logo-img"
+                    src={logo.src}
+                    alt={logo.alt}
+                    loading="eager"
+                    decoding="async"
+                  />
+                </div>
+              );
+            })}
           </div>
         ))}
       </div>

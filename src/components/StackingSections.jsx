@@ -11,19 +11,45 @@ const SECTION_META = [
   { id: 'contact',      label: 'Contact' },
 ];
 
-const SCALE_AMOUNT = 0.032;
-const NUDGE_Y      = 12;
+const SCALE_AMOUNT = 0.022;
+const NUDGE_Y      = 6;
 const RADIUS_MAX   = 14;
-const TRAVEL = 600;
+const OPACITY_FADE = 0.06;
+const DEFAULT_TRAVEL = 820;
+const ACTIVE_Z_BASE = 1000;
 
-const easeOutCubic = (t) => 1 - (1 - t) ** 3;
+const smootherstep = (t) => t * t * t * (t * (t * 6 - 15) + 10);
+
+const readTravel = (rootEl) => {
+  if (!rootEl) return DEFAULT_TRAVEL;
+  const raw = getComputedStyle(rootEl).getPropertyValue('--stack-travel').trim();
+  const parsed = parseFloat(raw);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_TRAVEL;
+};
+
+const getPanelDocTop = (panel) => {
+  if (!panel) return 0;
+  return panel.getBoundingClientRect().top + window.scrollY;
+};
+
+const getActivePanel = (scrollY, panelRefs) => {
+  let current = 0;
+  panelRefs.current.forEach((panel, i) => {
+    if (!panel) return;
+    if (scrollY >= getPanelDocTop(panel) - 1) {
+      current = i;
+    }
+  });
+  return current;
+};
 
 export default function StackingSections({ children }) {
-  const panelRefs   = useRef([]);
-  const sectionRefs = useRef([]);
+  const rootRef       = useRef(null);
+  const panelRefs     = useRef([]);
+  const sectionRefs   = useRef([]);
   const rafRef        = useRef(0);
   const activeRef     = useRef(0);
-  const rootTopRef    = useRef(0);
+  const travelRef     = useRef(DEFAULT_TRAVEL);
   const lastStylesRef = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [enabled, setEnabled] = useState(
@@ -47,35 +73,40 @@ export default function StackingSections({ children }) {
         sec.style.borderRadius = '';
         sec.style.opacity = '';
         sec.style.pointerEvents = '';
+        sec.style.zIndex = '';
       });
       return undefined;
     }
 
-    const measureRootTop = () => {
-      const firstPanel = panelRefs.current[0];
-      if (!firstPanel) return;
-      rootTopRef.current = firstPanel.getBoundingClientRect().top + window.scrollY;
+    const measure = () => {
+      travelRef.current = readTravel(rootRef.current);
     };
 
     const applyScroll = () => {
       rafRef.current = 0;
 
-      const scrolled = window.scrollY - rootTopRef.current;
+      const travel = travelRef.current;
+      const scrollY = window.scrollY;
+      const current = getActivePanel(scrollY, panelRefs);
 
       sectionRefs.current.forEach((sec, i) => {
         if (!sec) return;
 
-        const raw = Math.max(0, Math.min(1, (scrolled - i * TRAVEL) / TRAVEL));
-        const coveredBy = easeOutCubic(raw);
+        const panel = panelRefs.current[i];
+        const panelTop = getPanelDocTop(panel);
+        const raw = Math.max(0, Math.min(1, (scrollY - panelTop) / travel));
+        const coveredBy = smootherstep(raw);
         const scale  = 1 - coveredBy * SCALE_AMOUNT;
         const nudge  = coveredBy * -NUDGE_Y;
         const radius = coveredBy * RADIUS_MAX;
+        const opacity = 1 - coveredBy * OPACITY_FADE;
 
         const transform = `translate3d(0, ${nudge.toFixed(2)}px, 0) scale(${scale.toFixed(5)})`;
         const borderRadius = `${radius.toFixed(2)}px`;
-        const inPanel =
-          scrolled >= i * TRAVEL && (i === count - 1 || scrolled < (i + 1) * TRAVEL);
-        const pointerEvents = inPanel ? 'auto' : 'none';
+        const opacityValue = opacity.toFixed(4);
+        const isActive = i === current;
+        const pointerEvents = isActive ? 'auto' : 'none';
+        const zIndex = isActive ? String(ACTIVE_Z_BASE + i) : String(10 + i);
         const prev = lastStylesRef.current[i];
 
         if (!prev || prev.transform !== transform) {
@@ -84,20 +115,24 @@ export default function StackingSections({ children }) {
         if (!prev || prev.borderRadius !== borderRadius) {
           sec.style.borderRadius = borderRadius;
         }
+        if (!prev || prev.opacity !== opacityValue) {
+          sec.style.opacity = opacityValue;
+        }
         if (!prev || prev.pointerEvents !== pointerEvents) {
           sec.style.pointerEvents = pointerEvents;
         }
-
-        lastStylesRef.current[i] = { transform, borderRadius, pointerEvents };
-      });
-
-      let current = 0;
-      for (let i = 0; i < count; i += 1) {
-        if ((scrolled - i * TRAVEL) / TRAVEL >= 0.45) {
-          current = i;
+        if (!prev || prev.zIndex !== zIndex) {
+          sec.style.zIndex = zIndex;
         }
-      }
-      current = Math.min(current, count - 1);
+
+        lastStylesRef.current[i] = {
+          transform,
+          borderRadius,
+          opacity: opacityValue,
+          pointerEvents,
+          zIndex,
+        };
+      });
 
       if (current !== activeRef.current) {
         activeRef.current = current;
@@ -110,19 +145,28 @@ export default function StackingSections({ children }) {
       rafRef.current = requestAnimationFrame(applyScroll);
     };
 
-    measureRootTop();
+    measure();
 
-    const rootObserver = new ResizeObserver(measureRootTop);
-    const firstPanel = panelRefs.current[0];
-    if (firstPanel) rootObserver.observe(firstPanel);
+    const rootObserver = new ResizeObserver(() => {
+      measure();
+      applyScroll();
+    });
+
+    if (rootRef.current) rootObserver.observe(rootRef.current);
+    panelRefs.current.forEach((panel) => {
+      if (panel) rootObserver.observe(panel);
+    });
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', measureRootTop, { passive: true });
+    window.addEventListener('resize', () => {
+      measure();
+      applyScroll();
+    }, { passive: true });
     applyScroll();
 
     return () => {
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', measureRootTop);
+      window.removeEventListener('resize', measure);
       rootObserver.disconnect();
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       lastStylesRef.current = [];
@@ -130,10 +174,10 @@ export default function StackingSections({ children }) {
   }, [enabled, count]);
 
   const scrollToSection = (index) => {
-    const firstPanel = panelRefs.current[0];
-    if (!firstPanel) return;
-    const rootTop = firstPanel.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top: rootTop + index * TRAVEL, behavior: 'smooth' });
+    const panel = panelRefs.current[index];
+    if (!panel) return;
+    const top = getPanelDocTop(panel);
+    window.scrollTo({ top, behavior: 'smooth' });
   };
 
   if (!enabled) {
@@ -154,7 +198,7 @@ export default function StackingSections({ children }) {
         ))}
       </nav>
 
-      <div className="stacking-root">
+      <div className="stacking-root" ref={rootRef}>
         {childArray.map((child, i) => (
           <div
             key={SECTION_META[i]?.id ?? i}
@@ -164,7 +208,6 @@ export default function StackingSections({ children }) {
             <div
               className={`stacking-section${activeIndex === i ? ' stacking-section--active' : ''}`}
               ref={(el) => { sectionRefs.current[i] = el; }}
-              style={{ zIndex: 10 + i * 10 }}
             >
               {child}
             </div>

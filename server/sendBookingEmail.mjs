@@ -1,19 +1,4 @@
-const SERVICE_LABELS = {
-  full: 'Full event planning (From KES 80,000)',
-  'day-of': 'Day-of coordination (From KES 35,000)',
-  corporate: 'Corporate event (Custom quote)',
-  styling: 'Styling & décor only (From KES 20,000)',
-  unsure: "Not sure yet — let's talk",
-};
-
-const REQUIRED = [
-  'firstName',
-  'lastName',
-  'email',
-  'phone',
-  'eventType',
-  'service',
-];
+const REQUIRED = ['name', 'email', 'phone'];
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -39,7 +24,10 @@ function validate(body) {
     throw new Error('VALIDATION');
   }
 
-  if (String(body.vision ?? '').length > 400) {
+  const helpWith = Array.isArray(body.helpWith) ? body.helpWith.filter(Boolean) : [];
+  const eventDetails = Array.isArray(body.eventDetails) ? body.eventDetails.filter(Boolean) : [];
+
+  if (!helpWith.length || !eventDetails.length) {
     throw new Error('VALIDATION');
   }
 }
@@ -60,22 +48,17 @@ export async function sendBookingEmail(body) {
     throw new Error('Missing email configuration (RESEND_API_KEY, CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL)');
   }
 
-  const addons = Array.isArray(body.addons) ? body.addons.filter(Boolean) : [];
+  const helpWith = Array.isArray(body.helpWith) ? body.helpWith.filter(Boolean) : [];
+  const eventDetails = Array.isArray(body.eventDetails) ? body.eventDetails.filter(Boolean) : [];
 
   const html = `
     <h2>New booking request</h2>
     <table style="border-collapse:collapse;font-family:sans-serif;font-size:14px;line-height:1.5">
-      ${row('Name', `${body.firstName} ${body.lastName}`)}
+      ${row('Name', body.name)}
       ${row('Email', body.email)}
       ${row('Phone', body.phone)}
-      ${row('Event type', body.eventType)}
-      ${row('Event date', body.eventDate)}
-      ${row('Estimated guests', body.guests)}
-      ${row('Venue', body.venue)}
-      ${row('Service needed', SERVICE_LABELS[body.service] || body.service)}
-      ${row('Add-ons', addons.length ? addons.join(', ') : '—')}
-      ${row('How they heard', body.hearAbout)}
-      ${row('Vision', body.vision)}
+      ${row('How can I help', helpWith.join(', '))}
+      ${row('Event details', eventDetails.join(', '))}
     </table>
   `;
 
@@ -89,7 +72,7 @@ export async function sendBookingEmail(body) {
       from,
       to: [to],
       reply_to: body.email,
-      subject: `New booking request — ${body.firstName} ${body.lastName}`,
+      subject: `New booking request — ${body.name}`,
       html,
     }),
   });

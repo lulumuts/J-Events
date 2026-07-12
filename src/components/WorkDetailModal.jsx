@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { assetUrl } from '../utils/assetUrl';
+import WorkDetailContent, { formatModalText } from './WorkDetailContent';
 
 function ModalTitle({ project }) {
   if (project.titleLines?.length) {
@@ -79,10 +80,8 @@ export default function WorkDetailModal({ project, onClose }) {
         </div>
         <div className="bm-work-modal__copy">
           <ModalTitle project={project} />
-          <p className="bm-work-meta bm-work-modal__meta">{project.meta}</p>
-          {project.description ? (
-            <p className="bm-work-detail-desc bm-work-modal__desc">{project.description}</p>
-          ) : null}
+          <p className="bm-work-meta bm-work-modal__meta">{formatModalText(project.meta)}</p>
+          <WorkDetailContent project={project} className="bm-work-modal__desc" forModal />
         </div>
       </div>
     </div>,

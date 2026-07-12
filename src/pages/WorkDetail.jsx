@@ -5,6 +5,7 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { projects } from '../data/projects';
 import { assetUrl } from '../utils/assetUrl';
+import WorkDetailContent from '../components/WorkDetailContent';
 
 export default function WorkDetail() {
   const { slug } = useParams();
@@ -50,9 +51,7 @@ export default function WorkDetail() {
                   <div className="bm-work-detail-copy">
                     <h1 className="bm-work-title bm-work-detail-heading">{project.title}</h1>
                     <p className="bm-work-meta bm-work-detail-sub">{project.meta}</p>
-                    {project.description ? (
-                      <p className="bm-work-detail-desc">{project.description}</p>
-                    ) : null}
+                    <WorkDetailContent project={project} />
                   </div>
                 </Reveal>
 

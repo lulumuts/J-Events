@@ -47,6 +47,10 @@ export default function Portfolio() {
     if (!grid) return undefined;
 
     const onWheel = (event) => {
+      if (event.target.closest('.bm-work-toolbar, .bm-filter-btn, .bm-work-arrow')) {
+        return;
+      }
+
       const maxScroll = grid.scrollHeight - grid.clientHeight;
       if (maxScroll <= 0) return;
 
@@ -104,7 +108,10 @@ export default function Portfolio() {
               <button
                 type="button"
                 className="bm-work-arrow"
-                onClick={() => setSelectedProject(item)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setSelectedProject(item);
+                }}
                 aria-label={`View ${item.title} details`}
               >
                 <ArrowIcon />
