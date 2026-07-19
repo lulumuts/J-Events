@@ -1,10 +1,12 @@
 /* ─── Stacking scroll — uniform viewport cards, content fills height ─────── */
 
 .stacking-root {
-  --stack-offset-y: clamp(0.625rem, 1.5vh, 1.125rem);
-  --stack-card-h: calc(var(--bm-vh) - (var(--bm-page-margin-y) * 1.75) - var(--stack-offset-y));
+  --stack-offset-y: clamp(1rem, 2.5vh, 1.75rem);
+  --stack-top-push: clamp(0.75rem, 2.25vh, 1.75rem);
+  --stack-card-inset: clamp(1.25rem, 3.25vh, 2.5rem);
+  --stack-card-h: calc(var(--bm-vh) - (var(--bm-page-margin-y) * 2) - var(--stack-offset-y) - var(--stack-card-inset));
   --stack-services-extra-h: 0px;
-  --stack-services-top-extra: clamp(0.15rem, 0.5vh, 0.5rem);
+  --stack-services-top-extra: clamp(0.35rem, 1vh, 0.85rem);
   --stack-travel: 820px;
   --stack-hero-gap: clamp(16px, 2vh, 24px);
   width: 100%;
@@ -15,32 +17,42 @@
 }
 
 .stacking-panel {
+  --stack-panel-card-h: var(--stack-card-h);
+  --stack-travel: 820px;
   position: relative;
-  height: calc(var(--stack-card-h) + var(--stack-travel));
+  height: calc(var(--stack-panel-card-h) + var(--stack-travel));
 }
 
 .stacking-panel:first-child {
-  height: calc(var(--stack-card-h) + var(--stack-travel) + var(--stack-hero-gap));
+  height: calc(var(--stack-panel-card-h) + var(--stack-travel) + var(--stack-hero-gap));
 }
 
 .stacking-panel:first-child .stacking-section {
-  top: var(--bm-page-margin-y);
+  top: calc(var(--bm-page-margin-y) + var(--stack-offset-y) * 0.65 + var(--stack-top-push));
 }
 
 .stacking-panel--last {
-  height: calc(var(--stack-card-h) + var(--stack-travel));
-  min-height: calc(var(--stack-card-h) + var(--stack-travel));
+  height: calc(var(--stack-panel-card-h) + var(--stack-travel));
+  min-height: calc(var(--stack-panel-card-h) + var(--stack-travel));
+}
+
+.stacking-panel--compact {
+  --stack-travel: 460px;
+}
+
+.stacking-panel--stats {
+  --stack-panel-card-h: clamp(13.5rem, 26vh, 17.5rem);
 }
 
 .stacking-section {
   position: sticky;
-  top: calc(var(--bm-page-margin-y) + var(--stack-offset-y));
+  top: calc(var(--bm-page-margin-y) + var(--stack-offset-y) + var(--stack-top-push));
   width: 100%;
   max-width: 100%;
   margin-inline: auto;
-  height: var(--stack-card-h);
-  min-height: var(--stack-card-h);
-  max-height: var(--stack-card-h);
+  height: var(--stack-panel-card-h);
+  min-height: var(--stack-panel-card-h);
+  max-height: var(--stack-panel-card-h);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -123,12 +135,11 @@
 
 /* ── Stats ──────────────────────────────────────────────────────────────── */
 .stacking-section:has(> .bm-section--stats) {
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: visible;
 }
 
 .stacking-section:has(> .bm-section--stats) > .bm-section--stats {
-  justify-content: flex-start;
+  justify-content: center;
   overflow: visible;
   min-height: 100%;
 }
@@ -136,6 +147,7 @@
 .stacking-section:has(> .bm-section--stats) .bm-stats-wrap {
   flex: 0 0 auto;
   width: 100%;
+  justify-content: center;
 }
 
 .stacking-section:has(> .bm-section--stats) .bm-stats {
@@ -162,8 +174,8 @@
 
 /* ── Services ───────────────────────────────────────────────────────────── */
 .stacking-section:has(> #services) {
-  --stack-services-h: calc(var(--stack-card-h) + var(--stack-services-extra-h));
-  top: calc(var(--bm-page-margin-y) + var(--stack-offset-y) - (var(--stack-services-extra-h) / 2) + var(--stack-services-top-extra));
+  --stack-services-h: calc(var(--stack-panel-card-h) + var(--stack-services-extra-h));
+  top: calc(var(--bm-page-margin-y) + var(--stack-offset-y) + var(--stack-top-push) - (var(--stack-services-extra-h) / 2) + var(--stack-services-top-extra));
   height: var(--stack-services-h);
   min-height: var(--stack-services-h);
   max-height: var(--stack-services-h);
@@ -386,29 +398,36 @@
 }
 
 /* ── Contact ────────────────────────────────────────────────────────────── */
+.stacking-section:has(> #contact) {
+  --stack-panel-card-h: clamp(21rem, 58vh, 26rem);
+  height: var(--stack-panel-card-h);
+  min-height: var(--stack-panel-card-h);
+  max-height: var(--stack-panel-card-h);
+}
+
 .stacking-section:has(> #contact) > #contact.bm-section {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 100%;
+  min-height: 0;
 }
 
 .stacking-section:has(> #contact) .bm-contact.bm-contact--summary {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-height: 0;
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
-  padding: clamp(2rem, 6vh, 4rem) 0 clamp(1.5rem, 4vh, 2.5rem);
+  padding: clamp(1.5rem, 4vh, 2.5rem) 0 clamp(1rem, 2.5vh, 1.75rem);
   box-sizing: border-box;
 }
 
 .stacking-section:has(> #contact) .bm-contact--summary .bm-contact-inner {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .stacking-section:has(> #contact) .bm-contact--summary .bm-contact-footer {
@@ -460,11 +479,7 @@
 .stacking-root .reveal,
 .stacking-root .reveal-left,
 .stacking-root .reveal-right,
-.stacking-root .reveal-scale,
-.stacking-root .reveal-section,
-.stacking-root .reveal-section-left,
-.stacking-root .reveal-section-right,
-.stacking-root .reveal-section-scale {
+.stacking-root .reveal-scale {
   opacity: 1 !important;
   transform: none !important;
   transition: none !important;

@@ -18,11 +18,11 @@ export default function Home() {
             <Nav />
           </Hero>
         </Section>
-        <Section className="bm-section--stats" id="stats">
-          <Stats />
-        </Section>
         <Section className="bm-section--orange" id="intro">
           <WelcomeIntro />
+        </Section>
+        <Section className="bm-section--stats" id="stats">
+          <Stats />
         </Section>
         <Section className="bm-section--white" id="services">
           <Services />
@@ -33,7 +33,7 @@ export default function Home() {
         <Section className="bm-section--quote" id="testimonials">
           <Testimonials />
         </Section>
-        <Section className="bm-section--white" id="contact">
+        <Section className="bm-section--orange" id="contact">
           <Contact />
         </Section>
       </StackingSections>

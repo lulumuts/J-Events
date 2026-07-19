@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import WorkDetailModal from './WorkDetailModal';
-import { categories, projects } from '../data/projects';
+import WorkMetaFacts from './WorkMetaFacts';
+import { allFeaturedSlugs, categories, getProjectLocation, projects } from '../data/projects';
 import { assetUrl } from '../utils/assetUrl';
 
 const ArrowIcon = () => (
@@ -31,12 +32,26 @@ function WorkCardTitle({ item }) {
   return <div className="bm-work-title">{item.title}</div>;
 }
 
+function WorkCardDetails({ item }) {
+  return (
+    <WorkMetaFacts
+      category={item.category}
+      location={getProjectLocation(item)}
+      className="bm-work-card-meta-facts"
+    />
+  );
+}
+
 export default function Portfolio() {
   const [active, setActive] = useState('All');
   const [selectedProject, setSelectedProject] = useState(null);
   const gridRef = useRef(null);
   const filtered =
-    active === 'All' ? projects : projects.filter((p) => p.category === active);
+    active === 'All'
+      ? allFeaturedSlugs
+          .map((slug) => projects.find((p) => p.slug === slug))
+          .filter(Boolean)
+      : projects.filter((p) => p.category === active);
 
   useEffect(() => {
     gridRef.current?.scrollTo({ top: 0 });
@@ -102,7 +117,7 @@ export default function Portfolio() {
               <div className="bm-work-info">
                 <div className="bm-work-info-copy">
                   <WorkCardTitle item={item} />
-                  <div className="bm-work-meta">{item.meta}</div>
+                  <WorkCardDetails item={item} />
                 </div>
               </div>
               <button

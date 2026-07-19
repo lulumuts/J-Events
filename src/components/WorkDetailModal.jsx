@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { getProjectLocation } from '../data/projects';
 import { assetUrl } from '../utils/assetUrl';
-import WorkDetailContent, { formatModalText } from './WorkDetailContent';
+import WorkDetailContent from './WorkDetailContent';
+import WorkMetaFacts from './WorkMetaFacts';
 
 function ModalTitle({ project }) {
   if (project.titleLines?.length) {
@@ -20,6 +22,16 @@ function ModalTitle({ project }) {
     <h2 id="work-modal-title" className="bm-work-title bm-work-modal__title">
       {project.title}
     </h2>
+  );
+}
+
+function ModalDetails({ project }) {
+  return (
+    <WorkMetaFacts
+      category={project.category}
+      location={getProjectLocation(project)}
+      className="bm-work-modal__meta-facts"
+    />
   );
 }
 
@@ -69,6 +81,10 @@ export default function WorkDetailModal({ project, onClose }) {
           ×
         </button>
         <div className="bm-work-modal__media">
+          <div className="bm-work-modal__media-overlay" aria-hidden="true" />
+          <div className="bm-work-modal__media-header">
+            <ModalTitle project={project} />
+          </div>
           {project.image ? (
             <img
               src={assetUrl(project.image)}
@@ -79,8 +95,7 @@ export default function WorkDetailModal({ project, onClose }) {
           )}
         </div>
         <div className="bm-work-modal__copy">
-          <ModalTitle project={project} />
-          <p className="bm-work-meta bm-work-modal__meta">{formatModalText(project.meta)}</p>
+          <ModalDetails project={project} />
           <WorkDetailContent project={project} className="bm-work-modal__desc" forModal />
         </div>
       </div>

@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
+import AboutTimeline from '../components/AboutTimeline';
 import Reveal from '../components/Reveal';
 import Section from '../components/Section';
-import aboutPlaceholder from '../assets/vite.svg';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function About() {
   return (
@@ -18,9 +19,9 @@ export default function About() {
           </div>
           <div className="bm-hero">
             <div className="bm-hero-inner">
-              <div className="bm-work-detail">
+              <div className="bm-about-layout">
                 <Reveal type="left">
-                  <div className="bm-about-leftcol">
+                  <div className="bm-about-copy">
                     <h1 className="bm-h1 bm-about-title">About</h1>
                     <p className="bm-about-text">
                       I&apos;m Jordan — a freelance events and project manager based in Amsterdam,
@@ -41,15 +42,21 @@ export default function About() {
                   </div>
                 </Reveal>
 
-                <Reveal type="scale" delay={1}>
-                  <div className="bm-work-detail-media bm-about-media">
-                    <img src={aboutPlaceholder} alt="About placeholder" />
+                <Reveal type="right" delay={1}>
+                  <div className="bm-about-side">
+                    <div className="bm-about-media">
+                      <img
+                        src={assetUrl('about-jordan.png')}
+                        alt="Jordan Graham at an event"
+                        className="bm-about-media__photo"
+                      />
+                    </div>
+                    <AboutTimeline />
                   </div>
                 </Reveal>
               </div>
             </div>
           </div>
-
         </Section>
       </main>
     </div>

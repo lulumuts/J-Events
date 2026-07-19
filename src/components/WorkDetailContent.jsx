@@ -19,10 +19,12 @@ export default function WorkDetailContent({ project, className = '', forModal = 
           <dt>Role</dt>
           <dd>{fmt(details.role)}</dd>
         </div>
-        <div className="bm-work-detail-fact">
-          <dt>Location</dt>
-          <dd>{fmt(details.location)}</dd>
-        </div>
+        {!forModal ? (
+          <div className="bm-work-detail-fact">
+            <dt>Location</dt>
+            <dd>{fmt(details.location)}</dd>
+          </div>
+        ) : null}
       </dl>
 
       <div className="bm-work-detail-scope">
@@ -38,7 +40,7 @@ export default function WorkDetailContent({ project, className = '', forModal = 
               <li key={item.title}>
                 <strong>{fmt(item.title)}</strong>
                 {forModal ? ': ' : ' — '}
-                {fmt(item.detail)}
+                <span className="bm-work-detail-achievement-detail">{fmt(item.detail)}</span>
               </li>
             ))}
           </ul>

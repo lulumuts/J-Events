@@ -48,35 +48,45 @@ export default function Services() {
   const renderServiceName = (name) => {
     const parts = name.split(' ');
     if (parts.length < 2) return name;
-    return (
-      <>
-        <span className="bm-svc-name-line">{parts[0]}</span>
-        <span className="bm-svc-name-line">{parts.slice(1).join(' ')}</span>
-      </>
-    );
+
+    return parts.map((part, index) => (
+      <span className="bm-svc-name-line" key={`${part}-${index}`}>
+        {part}
+      </span>
+    ));
   };
 
   return (
     <div className="bm-services">
       <div className="bm-services-inner">
-        <div className="bm-services-content">
-          <Reveal>
-            <div className="bm-sec-header">
-              <div className="bm-sec-title">Services</div>
-              <p className="bm-services-intro">
-                People are the real formula for success, and that&apos;s where I come in.
-                With experience spanning event planning, content creation, and project
-                management, I help turn your ideas into events that resonate, while keeping
-                a genuine pulse on your community.
-              </p>
-            </div>
-          </Reveal>
+        <div className="bm-services-layout">
+          <div className="bm-services-copy">
+            <Reveal>
+              <div className="bm-sec-header">
+                <div className="bm-sec-title">Services</div>
+                <div className="bm-services-intro-block">
+                  <p className="bm-services-intro">
+                    People are the real formula for success, and that&apos;s where I come in.
+                    <span className="bm-services-intro-rest">
+                      With experience spanning event planning, content creation, and project
+                      management, I help turn your ideas into events that resonate, while keeping
+                      a genuine pulse on your community.
+                    </span>
+                  </p>
+                  <div className="bm-services-cta">
+                    <Link className="bm-learn-more" to="/book">Book a consultation</Link>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+
           <div className="bm-svc-grid">
             {services.map((s, i) => (
               <Reveal key={s.name} type="scale" delay={(i % 4) + 1}>
                 <div className="bm-svc">
-                  <div className="bm-svc-num">{s.num}</div>
                   <div className="bm-svc-content">
+                    <div className="bm-svc-num">{s.num}</div>
                     <div className="bm-svc-name">{renderServiceName(s.name)}</div>
                     <p className="bm-svc-desc">{s.intro}</p>
                     <ul className="bm-svc-list">
@@ -89,10 +99,6 @@ export default function Services() {
               </Reveal>
             ))}
           </div>
-        </div>
-
-        <div className="bm-services-cta">
-          <Link className="bm-learn-more" to="/book">Book a consultation</Link>
         </div>
       </div>
     </div>

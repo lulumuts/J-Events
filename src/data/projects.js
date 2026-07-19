@@ -5,10 +5,17 @@ export const categories = [
   'Social',
 ];
 
+export const allFeaturedSlugs = [
+  'julies-top-5-live-black-british-anthems-2026',
+  'discomcierge-changenow-2026',
+  'cfo-construction-summit',
+  'julies-top-5-season-7',
+];
+
 export const projects = [
   {
     slug: 'discomcierge-changenow-2026',
-    title: 'DisComCierge x ChangeNow 2026 & 2025',
+    title: 'DisComCierge x ChangeNow 2026, 2025',
     meta: 'Climate · ChangeNOW Paris',
     category: 'Climate',
     image: 'discomcierge-changenow-2026.png',
@@ -159,7 +166,7 @@ export const projects = [
   },
   {
     slug: 'julies-top-5-live-black-british-anthems-2026',
-    title: "Julie's Top 5 Live 2026",
+    title: "Julie's Top 5 Live: Black British Anthems",
     meta: 'Social · Roundhouse, London',
     category: 'Social',
     image: 'julies-top-5.png',
@@ -183,6 +190,33 @@ export const projects = [
           title: 'Safety & Execution',
           detail:
             'authored all critical documentation, and complex stage Run of Show for flawless execution',
+        },
+      ],
+    },
+  },
+  {
+    slug: 'julies-top-5-season-7',
+    title: "Julie's Top 5: Season 7",
+    meta: 'Social · Julie\'s Top 5',
+    category: 'Social',
+    image: 'julies-top-5.png',
+    imageAlt: "Julie's Top 5 Season 7",
+    details: {
+      role: 'Event Manager',
+      location: 'Remote — London',
+      scope: "Production and delivery for Julie's Top 5 Season 7.",
+      achievements: [
+        {
+          title: 'End to end production',
+          detail: 'managed planning, production timelines, and on-the-day delivery',
+        },
+        {
+          title: 'Talent coordination',
+          detail: 'confirmed and managed guests, panellists, and production partners',
+        },
+        {
+          title: 'Show delivery',
+          detail: 'authored run of show and operational documentation for seamless execution',
         },
       ],
     },
@@ -262,3 +296,15 @@ export const projects = [
       'Catering and event delivery for Alma Amsterdam at Melting Shack—guest experience, service flow, and on-the-day execution.',
   },
 ];
+
+export function getProjectLocation(project) {
+  if (project.location) return project.location;
+
+  const detailsLocation = project.details?.location;
+  if (detailsLocation) {
+    const match = detailsLocation.match(/[—–-]\s*(.+)$/);
+    return match ? match[1].trim() : detailsLocation.trim();
+  }
+
+  return '';
+}

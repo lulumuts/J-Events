@@ -32,74 +32,26 @@ export function useScrollReveal(options = {}) {
   return [ref, isVisible];
 }
 
-export function useStatsSectionReveal() {
-  const ref = useRef(null);
-  const [revealed, setRevealed] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return undefined;
-
-    const section = el.closest('.stacking-section');
-    let rafId = 0;
-
-    const show = () => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        rafId = requestAnimationFrame(() => setRevealed(true));
-      });
-    };
-
-    if (section) {
-      const sync = () => {
-        if (section.classList.contains('stacking-section--active')) {
-          show();
-        }
-      };
-
-      sync();
-      const observer = new MutationObserver(sync);
-      observer.observe(section, { attributes: true, attributeFilter: ['class'] });
-
-      return () => {
-        observer.disconnect();
-        cancelAnimationFrame(rafId);
-      };
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          show();
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.35, rootMargin: '0px' },
-    );
-
-    observer.observe(el);
-
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(rafId);
-    };
-  }, []);
-
-  return [ref, revealed];
-}
-
 export function useCountUp(target, isVisible) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (!isVisible) return;
-    let start = 0;
-    const step = target / 40;
+    if (!isVisible) return undefined;
+
+    const steps = 50;
+    const step = target / steps;
+    let current = 0;
+
     const timer = setInterval(() => {
-      start = Math.min(start + step, target);
-      setCount(Math.round(start));
-      if (start >= target) clearInterval(timer);
+      current += step;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(timer);
+        return;
+      }
+      setCount(Math.floor(current));
     }, 30);
+
     return () => clearInterval(timer);
   }, [isVisible, target]);
 
