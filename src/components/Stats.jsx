@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react';
-import { useCountUp, useScrollReveal } from '../hooks/useScrollReveal';
 import nowYouKnowLogo from '../assets/logos/now-you-know-logo.png';
 import roundhouseLogo from '../assets/logos/roundhouse-logo.png';
 import constructionCfoLogo from '../assets/logos/construction-cfo-summit-logo.png';
@@ -31,25 +30,7 @@ const clientLogos = [
 
 const carouselLogos = Array.from({ length: LOGO_LOOP_COPIES }, () => clientLogos).flat();
 
-const statCounters = [
-  { value: 900, suffix: '+', label: 'Guests' },
-  { value: 10, suffix: '+', label: 'Years' },
-  { value: 7, suffix: '', label: 'Cities' },
-  { value: 16, suffix: '', label: 'Week Production Timelines' },
-];
-
 const eventCities = ['London', 'Amsterdam', 'Paris', 'San Francisco', 'New York'];
-
-function StatCounterValue({ value, suffix, isVisible }) {
-  const count = useCountUp(value, isVisible);
-
-  return (
-    <div className="bm-stats-counter__value bm-stat-num">
-      {count}
-      {suffix}
-    </div>
-  );
-}
 
 const ArrowIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -71,7 +52,6 @@ clientLogos.forEach(({ src }) => {
 export default function Stats() {
   const innerRef = useRef(null);
   const [paused, setPaused] = useState(false);
-  const [countersRef, countersVisible] = useScrollReveal();
 
   const nudgeForward = () => {
     const inner = innerRef.current;
@@ -94,18 +74,6 @@ export default function Stats() {
   return (
     <div className="bm-stats-wrap">
       <header className="bm-stats-header">
-        <div className="bm-stats-counters" ref={countersRef}>
-          {statCounters.map((stat) => (
-            <div key={stat.label} className="bm-stats-counter-col">
-              <div className="bm-stats-counter__label bm-stat-lbl">{stat.label}</div>
-              <StatCounterValue
-                value={stat.value}
-                suffix={stat.suffix}
-                isVisible={countersVisible}
-              />
-            </div>
-          ))}
-        </div>
         <h3 className="bm-stats-section-label bm-stats-worked-with-label">Worked With</h3>
       </header>
       <div className="bm-stats">
@@ -146,7 +114,7 @@ export default function Stats() {
           </button>
         </div>
       </div>
-      <div className="bm-stats-cities">
+      <div className="bm-stats-cities bm-stats-cities--bottom">
         <h3 className="bm-stats-section-label">Global events across</h3>
         <ul className="bm-stats-cities-row">
           {eventCities.map((city) => (

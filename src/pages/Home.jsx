@@ -33,7 +33,7 @@ export default function Home() {
         <Section className="bm-section--quote" id="testimonials">
           <Testimonials />
         </Section>
-        <Section className="bm-section--orange" id="contact">
+        <Section className="bm-section--white" id="contact">
           <Contact />
         </Section>
       </StackingSections>

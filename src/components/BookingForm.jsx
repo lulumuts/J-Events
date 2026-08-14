@@ -48,7 +48,7 @@ export default function BookingForm() {
 
     if (!form.helpWith.length || !form.eventDetails.length) {
       setStatus('error');
-      setErrorMessage('Please select at least one option for How Can I Help and Event Details.');
+      setErrorMessage('Please select at least one option for How can I help? and Event Details.');
       return;
     }
 
@@ -130,7 +130,7 @@ export default function BookingForm() {
               </fieldset>
 
               <fieldset className="bm-form-section" aria-labelledby="booking-help">
-                <h3 id="booking-help" className="bm-form-legend">How Can I Help *</h3>
+                <h3 id="booking-help" className="bm-form-legend">How can I help? *</h3>
                 <div className="bm-checkbox-group">
                   {HELP_OPTIONS.map((option) => (
                     <label key={option} className="bm-checkbox">

@@ -19,7 +19,7 @@ export default function WelcomeIntro() {
               execution with creative project plans covering content, venue &amp; logistics
               while focusing on <span className="bm-emph">the</span> experience of your guest.
             </p>
-            <Link className="bm-learn-more" to="/about">Learn more</Link>
+            <Link className="bm-learn-more" to="/about">About Jordan</Link>
           </div>
         </Reveal>
       </div>

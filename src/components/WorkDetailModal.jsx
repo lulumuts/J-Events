@@ -6,18 +6,6 @@ import WorkDetailContent from './WorkDetailContent';
 import WorkMetaFacts from './WorkMetaFacts';
 
 function ModalTitle({ project }) {
-  if (project.titleLines?.length) {
-    return (
-      <h2 id="work-modal-title" className="bm-work-title bm-work-modal__title">
-        {project.titleLines.map((line) => (
-          <span key={line} className="bm-work-title-line">
-            {line}
-          </span>
-        ))}
-      </h2>
-    );
-  }
-
   return (
     <h2 id="work-modal-title" className="bm-work-title bm-work-modal__title">
       {project.title}

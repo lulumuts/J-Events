@@ -77,6 +77,39 @@ export const projects = [
     },
   },
   {
+    slug: 'global-climate-tech-bootcamp',
+    title: 'Global ClimateTech Bootcamp 2023',
+    titleLines: ['Global Climate Tech'],
+    meta: 'Climate · Impact Hustlers',
+    category: 'Climate',
+    image: 'global-climate-tech-bootcamp.png',
+    imageAlt:
+      'Team at the Global ClimateTech Bootcamp booth with Impact Hustlers branding at Impact Festival',
+    details: {
+      role: 'Event Manager (via Impact Hustlers)',
+      location: 'Remote — London',
+      scope:
+        'Content and operational delivery for Impact Hustlers 6 week global bootcamp with 6 UK and 6 European based founders.',
+      achievements: [
+        {
+          title: 'Project Design',
+          detail:
+            'Designed The Global ClimateTech Bootcamp that gained £35k in funding from StartHub Hessen & Impact Festival in 2023',
+        },
+        {
+          title: 'Strategic Delivery',
+          detail:
+            'Created and managed the project master plans for the lead up and the 6 week bootcamp.',
+        },
+        {
+          title: 'On site Production',
+          detail:
+            'Lead the on site production of the European showcase at Impact Festival in Frankfurt.',
+        },
+      ],
+    },
+  },
+  {
     slug: 'cfo-construction-summit',
     title: 'Construction CFO Summit 2026, 2025',
     titleLines: ['Construction CFO Summit', '2026, 2025'],

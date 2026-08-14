@@ -519,6 +519,7 @@
 
 @media (min-width: 1200px) {
   .stacking-section {
-    max-width: var(--bm-content-max);
+    width: var(--bm-container-width);
+    max-width: var(--bm-container-width);
   }
 }
