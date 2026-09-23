@@ -24,14 +24,14 @@ export default function About() {
                   <div className="bm-about-copy">
                     <h1 className="bm-h1 bm-about-title">About</h1>
                     <p className="bm-about-text">
-                      I&apos;m Jordan — a freelance events and project manager based in Amsterdam,
+                      I&apos;m Jordan, a freelance events and project manager based in Amsterdam,
                       with over a decade of experience bringing live and virtual experiences to life.
                       From intimate brand launches to flagship summits drawing thousands of registrants,
                       I handle everything from the first concept call to the final curtain.
                     </p>
                     <p className="bm-about-text">
                       My background spans conference production, community building, content strategy
-                      and speaker management — so when I come on board, I bring a joined-up view of
+                      and speaker management, so when I come on board, I bring a joined-up view of
                       what makes an event actually work. I care about the detail, the delegate
                       experience, and whether the whole thing lands the way you imagined it.
                     </p>
@@ -51,6 +51,11 @@ export default function About() {
                         className="bm-about-media__photo"
                       />
                     </div>
+                  </div>
+                </Reveal>
+
+                <Reveal delay={2} className="bm-about-timeline-reveal">
+                  <div className="bm-about-timeline-row">
                     <AboutTimeline />
                   </div>
                 </Reveal>

@@ -31,6 +31,10 @@ jobs:
         run: npm ci
 
       - name: Build for GitHub Pages
+        env:
+          # Optional until the site is on Vercel: repo Settings → Secrets → VITE_CONTACT_API_URL
+          # e.g. https://your-project.vercel.app/api/contact
+          VITE_CONTACT_API_URL: ${{ secrets.VITE_CONTACT_API_URL }}
         run: npm run build:gh-pages
 
       - name: Upload Pages artifact

@@ -79,7 +79,9 @@ export async function sendBookingEmail(body) {
 
   if (!response.ok) {
     const errText = await response.text();
-    console.error('Resend error:', errText);
+    console.error('Resend error:', response.status, errText);
     throw new Error('RESEND_FAILED');
   }
+
+  return response.json();
 }

@@ -24,6 +24,8 @@ const initialForm = {
   eventDetails: [],
 };
 
+const CONTACT_API_URL = import.meta.env.VITE_CONTACT_API_URL || '/api/contact';
+
 export default function BookingForm() {
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState('idle');
@@ -55,7 +57,7 @@ export default function BookingForm() {
     setStatus('sending');
 
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch(CONTACT_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -80,17 +82,15 @@ export default function BookingForm() {
       <Link to="/#contact" className="bm-book-back">
         ← Back
       </Link>
-      <div className="bm-book-scroll">
-        <div className="bm-contact-inner">
-          <div className="bm-book-intro">
-            <div className="bm-sec-header">
-              <div className="bm-sec-title">Tell me about your event</div>
-            </div>
+      <div className="bm-contact-inner">
+        <div className="bm-book-intro">
+          <div className="bm-sec-header">
+            <div className="bm-sec-title">Tell me about your event</div>
           </div>
-          <p className="bm-contact-sub">
-            Fill in the details below and I&apos;ll be in touch within 24 hours to discuss your vision.
-          </p>
+        </div>
 
+        <div className="bm-book-scroll-wrap">
+          <div className="bm-book-scroll">
           <form className="bm-booking-form" onSubmit={handleSubmit} noValidate>
               <fieldset className="bm-form-section" aria-labelledby="booking-your-details">
                 <h3 id="booking-your-details" className="bm-form-legend">Your Details</h3>
@@ -182,7 +182,8 @@ export default function BookingForm() {
               <p className="bm-contact-privacy">
                 Your details are kept private and never shared with third parties.
               </p>
-            </form>
+          </form>
+          </div>
         </div>
       </div>
     </div>

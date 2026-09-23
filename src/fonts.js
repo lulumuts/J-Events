@@ -1,0 +1,9 @@
+import '@fontsource/dm-sans/300.css';
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/500.css';
+import '@fontsource/dm-sans/600.css';
+import '@fontsource/dm-sans/700.css';
+import '@fontsource/syne/400.css';
+import '@fontsource/syne/700.css';
+import '@fontsource/syne/800.css';
+import '@fontsource/ultra/400.css';

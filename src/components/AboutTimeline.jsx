@@ -1,5 +1,5 @@
-const timelineItems = [
-  {
+const timelineItems = {
+  spark: {
     period: '2015 - 2017',
     title: 'The Spark',
     body: (
@@ -9,7 +9,7 @@ const timelineItems = [
       </>
     ),
   },
-  {
+  momentum: {
     period: '2017 - 2021',
     title: 'Building Momentum',
     body: (
@@ -21,7 +21,7 @@ const timelineItems = [
       </>
     ),
   },
-  {
+  myWay: {
     period: '2021 - 2023',
     title: 'Building It My Way',
     body: (
@@ -33,18 +33,40 @@ const timelineItems = [
       </>
     ),
   },
-];
+};
+
+function TimelineCopy({ item }) {
+  return (
+    <>
+      <p className="bm-about-timeline__period">{item.period}</p>
+      <h2 className="bm-about-timeline__title">{item.title}</h2>
+      <p className="bm-about-timeline__body">{item.body}</p>
+    </>
+  );
+}
 
 export default function AboutTimeline() {
+  const { spark, momentum, myWay } = timelineItems;
+
   return (
-    <ol className="bm-about-timeline" aria-label="Career timeline">
-      {timelineItems.map((item) => (
-        <li key={item.period} className="bm-about-timeline__item">
-          <p className="bm-about-timeline__period">{item.period}</p>
-          <h2 className="bm-about-timeline__title">{item.title}</h2>
-          <p className="bm-about-timeline__body">{item.body}</p>
-        </li>
-      ))}
-    </ol>
+    <div className="bm-about-timeline" aria-label="Career timeline">
+      <div className="bm-about-timeline__above bm-about-timeline__above--left">
+        <TimelineCopy item={spark} />
+      </div>
+
+      <div className="bm-about-timeline__above bm-about-timeline__above--right">
+        <TimelineCopy item={myWay} />
+      </div>
+
+      <div className="bm-about-timeline__rail" aria-hidden="true">
+        <span className="bm-about-timeline__dot" />
+        <span className="bm-about-timeline__dot" />
+        <span className="bm-about-timeline__dot" />
+      </div>
+
+      <div className="bm-about-timeline__below bm-about-timeline__below--center">
+        <TimelineCopy item={momentum} />
+      </div>
+    </div>
   );
 }
