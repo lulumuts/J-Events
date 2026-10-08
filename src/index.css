@@ -28,8 +28,8 @@
   --bm-container-width: 80%;
   --bm-content-max: var(--bm-container-width);
   --bm-inner-max: 100%;
-  --bm-radius-section: 14px;
-  --bm-work-card-radius: clamp(14px, 1.5vw, 18px);
+  --bm-radius-section: 24px;
+  --bm-work-card-radius: 24px;
   --bm-work-card-aspect: 7 / 8;
   --bm-work-card-basis: clamp(9rem, 42vw, 13rem);
   --bm-sec-title-display: clamp(1.875rem, 1.35rem + 2.5vw, 2.875rem);
@@ -67,6 +67,12 @@
   --bm-scrollbar-thumb: var(--bm-btn-orange);
   --bm-scrollbar-thumb-hover: color-mix(in srgb, var(--bm-btn-orange) 88%, #fff);
   --bm-scrollbar-edge: var(--bm-bg);
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --bm-container-width: 75%;
+  }
 }
 
 @supports not (height: 100dvh) {
@@ -273,18 +279,20 @@ body {
 }
 
 .bm-main {
+  --bm-home-section-gap: var(--bm-section-gap);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--bm-section-gap);
-  padding-bottom: calc(var(--bm-section-gap) * 1.25);
+  gap: var(--bm-home-section-gap);
+  padding-bottom: var(--bm-home-section-gap);
   flex: 1;
   width: 100%;
 }
 
-.bm-main > .bm-section--hero + .bm-section--orange,
-.bm-main > .bm-section--hero + #intro.bm-section {
-  margin-top: clamp(0.5rem, 1.5vh, 1rem);
+/* Home stack only (hero + intro + …) */
+.bm-main:has(> .bm-section--hero:first-child):has(> #intro) {
+  --bm-home-section-gap: calc(var(--bm-section-gap) * 2);
+  padding-top: var(--bm-hero-top-offset);
 }
 
 .bm-section {
@@ -301,7 +309,7 @@ body {
 .bm-section--hero {
   background: transparent;
   min-height: clamp(640px, 88vh, 980px);
-  margin-top: var(--bm-hero-top-offset);
+  margin-top: 0;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -540,9 +548,17 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   height: auto;
   min-height: 0;
   overflow: visible;
+}
+
+.bm-main:has(> #intro) > .bm-featured-quote-section.bm-section {
+  width: 62%;
+  max-width: 62%;
+  margin-inline: auto;
+  margin-block: 0;
 }
 
 .bm-featured-quote-section .bm-quote-text {
@@ -567,7 +583,7 @@ body {
 
 .bm-featured-quote-section .bm-featured-quote {
   width: 100%;
-  max-width: none;
+  max-width: 100%;
   padding: clamp(1.25rem, 3vw, 1.75rem) var(--bm-stats-pad-x);
   box-sizing: border-box;
   margin: 0;
@@ -674,16 +690,18 @@ body {
 }
 
 .bm-hero-glass-card {
+  --bm-hero-frame-radius: var(--bm-radius-section);
+  --bm-hero-frame-border: clamp(2px, 0.35vw, 3px);
   position: relative;
   z-index: 1;
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
-  border-radius: 20px;
+  border-radius: var(--bm-hero-frame-radius);
   overflow: hidden;
   background: transparent;
-  border: 1px solid var(--bm-btn-orange);
+  border: var(--bm-hero-frame-border) solid var(--bm-btn-orange);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
@@ -691,9 +709,10 @@ body {
   position: absolute;
   inset: 0;
   z-index: 0;
-  border-radius: inherit;
+  border-radius: max(0px, calc(var(--bm-hero-frame-radius) - var(--bm-hero-frame-border)));
   overflow: hidden;
   background: var(--bm-dark-orange);
+  isolation: isolate;
 }
 
 .bm-hero-video {
@@ -702,6 +721,10 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: max(
+    0px,
+    calc(var(--bm-hero-frame-radius) - var(--bm-hero-frame-border) - 1px)
+  );
   opacity: 0;
   transform: none;
 }
@@ -713,6 +736,7 @@ body {
 .bm-hero-video-overlay {
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   background:
     radial-gradient(60% 80% at 65% 40%, rgba(var(--bm-dark-orange-rgb), 0.3), rgba(0, 0, 0, 0.66)),
     linear-gradient(0deg, rgba(var(--bm-dark-orange-rgb), 0.5), rgba(var(--bm-dark-orange-rgb), 0.5));
@@ -1304,10 +1328,10 @@ body {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin-top: clamp(1rem, 2.5vw, 1.75rem);
-  margin-bottom: clamp(1rem, 2.5vw, 1.75rem);
-  padding-top: clamp(0.75rem, 1.75vh, 1.25rem);
-  padding-bottom: clamp(1rem, 2.5vw, 1.75rem);
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: clamp(1.25rem, 3vh, 2rem);
+  padding-bottom: clamp(1.25rem, 3vh, 2rem);
   box-sizing: border-box;
 }
 
@@ -2065,7 +2089,7 @@ body {
   padding-inline: var(--bm-svc-card-pad-x);
   padding-top: var(--bm-svc-card-pad-top);
   padding-bottom: var(--bm-svc-card-pad-bottom);
-  border-radius: clamp(14px, 2vw, 18px);
+  border-radius: var(--bm-radius-section);
   border: 2px solid transparent;
   transition:
     border-color 0.25s var(--ease-spring),
@@ -2188,7 +2212,7 @@ body {
 
 .bm-svc {
   background: var(--bm-dark-orange);
-  border-radius: 18px;
+  border-radius: var(--bm-radius-section);
   padding: clamp(0.5rem, 1.25vw, 0.75rem);
   position: relative;
   overflow: hidden;
@@ -3354,7 +3378,7 @@ body {
   padding: clamp(1.35rem, 3.5vw, 2.25rem) clamp(1.125rem, 4.5vw, 2.25rem);
   box-sizing: border-box;
   background: var(--bm-bg);
-  border-radius: clamp(10px, 1.75vw, 14px);
+  border-radius: var(--bm-radius-section);
 }
 
 .bm-about-quote-section .bm-featured-quote {
@@ -3800,6 +3824,13 @@ body {
   .bm-about-root .bm-about-page.bm-section {
     width: min(86%, 70rem);
     max-width: min(86%, 70rem);
+  }
+}
+
+@media (min-width: 1200px) {
+  .bm-about-root .bm-about-page.bm-section {
+    width: min(82%, 66rem);
+    max-width: min(82%, 66rem);
   }
 }
 
@@ -4694,7 +4725,7 @@ body {
   margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
   padding: clamp(2rem, 4.5vw, 3rem) clamp(2rem, 5vw, 3.25rem);
   background: var(--bm-book-form-bg);
-  border-radius: clamp(14px, 2vw, 18px);
+  border-radius: var(--bm-radius-section);
   min-height: clamp(11rem, 24vh, 14rem);
   box-sizing: border-box;
 }
@@ -4788,7 +4819,7 @@ body {
 }
 
 .bm-book-page .bm-form-group textarea {
-  border-radius: clamp(14px, 2vw, 18px);
+  border-radius: calc(var(--bm-radius-section) * 0.667);
 }
 
 .bm-book-page .bm-checkbox-group {
@@ -4943,7 +4974,7 @@ body {
   margin: 0 0 clamp(1.25rem, 3vw, 1.75rem);
   padding: clamp(1rem, 2.5vw, 1.35rem);
   min-width: 0;
-  border-radius: 12px;
+  border-radius: var(--bm-radius-section);
   background: rgba(255, 106, 0, 0.1);
   overflow: visible;
 }

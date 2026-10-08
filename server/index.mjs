@@ -1,13 +1,21 @@
 import 'dotenv/config';
 import express from 'express';
-import cors from 'cors';
 import { sendBookingEmail } from './sendBookingEmail.mjs';
+import { applyContactCors } from './contactCors.mjs';
 
 const app = express();
 const PORT = process.env.PORT || 8787;
 
-app.use(cors({ origin: true }));
 app.use(express.json({ limit: '32kb' }));
+
+app.use('/api/contact', (req, res, next) => {
+  applyContactCors(req, res);
+  if (req.method === 'OPTIONS') {
+    res.status(204).end();
+    return;
+  }
+  next();
+});
 
 app.post('/api/contact', async (req, res) => {
   try {

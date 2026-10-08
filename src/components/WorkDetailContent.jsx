@@ -1,7 +1,4 @@
-export function formatModalText(text) {
-  if (!text) return text;
-  return text.replace(/\s*[—–]\s*/g, ': ');
-}
+import { formatModalText } from '../utils/formatModalText';
 
 export default function WorkDetailContent({ project, className = '', forModal = false }) {
   const { details, description } = project;

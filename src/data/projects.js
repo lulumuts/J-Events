@@ -202,7 +202,7 @@ export const projects = [
     title: "Julie's Top 5 Live: Black British Anthems",
     meta: 'Social · Roundhouse, London',
     category: 'Social',
-    image: 'julies-top-5.png',
+    image: 'NYK-Launch-party.png',
     imageAlt: "Julie's Top 5 Live on stage with host and guests at the Roundhouse",
     details: {
       role: 'Event Manager',
@@ -232,7 +232,7 @@ export const projects = [
     title: "Julie's Top 5: Season 7",
     meta: 'Social · Julie\'s Top 5',
     category: 'Social',
-    image: 'julies-top-5.png',
+    image: 'NYK-Launch-party.png',
     imageAlt: "Julie's Top 5 Season 7",
     details: {
       role: 'Event Manager',

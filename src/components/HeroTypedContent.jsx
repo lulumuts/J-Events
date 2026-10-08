@@ -22,19 +22,23 @@ export default function HeroTypedContent({ start, onTypingComplete }) {
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) {
-      setLine1Count(HEADLINE_1.length);
-      setLine2Count(HEADLINE_2.length);
-      setVisiblePillCount(PILLS.length);
-      setPhase('done');
-      setBtnsVisible(true);
+      queueMicrotask(() => {
+        setLine1Count(HEADLINE_1.length);
+        setLine2Count(HEADLINE_2.length);
+        setVisiblePillCount(PILLS.length);
+        setPhase('done');
+        setBtnsVisible(true);
+      });
       return undefined;
     }
 
-    setLine1Count(0);
-    setLine2Count(0);
-    setVisiblePillCount(0);
-    setPhase('line1');
-    setBtnsVisible(false);
+    queueMicrotask(() => {
+      setLine1Count(0);
+      setLine2Count(0);
+      setVisiblePillCount(0);
+      setPhase('line1');
+      setBtnsVisible(false);
+    });
     return undefined;
   }, [start, onTypingComplete]);
 

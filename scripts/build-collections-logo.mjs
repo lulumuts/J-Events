@@ -5,10 +5,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const logosDir = join(__dirname, '../src/assets/logos');
 
-const sourceCandidates = [
-  join(logosDir, 'COLLECTIONS_LOGO.png'),
-  '/Users/lulumutuli/Dropbox/My Mac (lulu’s MacBook Pro)/Downloads/COLLECTIONS_LOGO.png',
-];
+const sourcePath = join(logosDir, 'COLLECTIONS_LOGO.png');
 
 async function processCollectionsLogo(sourcePath) {
   const outputPath = join(logosDir, 'collections-logo.png');
@@ -36,11 +33,4 @@ async function processCollectionsLogo(sourcePath) {
   console.log(`Processed ${sourcePath} -> ${outputPath}`);
 }
 
-for (const sourcePath of sourceCandidates) {
-  try {
-    await processCollectionsLogo(sourcePath);
-    break;
-  } catch {
-    // try next source
-  }
-}
+await processCollectionsLogo(sourcePath);

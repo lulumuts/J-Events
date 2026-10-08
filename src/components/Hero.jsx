@@ -24,7 +24,7 @@ export default function Hero({ children }) {
   const [typingComplete, setTypingComplete] = useState(false);
   const [videoPlaybackReady, setVideoPlaybackReady] = useState(false);
   const [videoIntroActive, setVideoIntroActive] = useState(false);
-  const [noBackdrop, setNoBackdrop] = useState(false);
+  const [noBackdrop] = useState(() => !supportsBackdropFilter());
 
   const finishIntro = useCallback(() => {
     heroRef.current?.classList.add('bm-hero-stage--intro-done');
@@ -58,8 +58,7 @@ export default function Hero({ children }) {
   }, []);
 
   useEffect(() => {
-    setNoBackdrop(!supportsBackdropFilter());
-    setLoadVideo(true);
+    queueMicrotask(() => setLoadVideo(true));
 
     let outerFrame = 0;
     let innerFrame = 0;
