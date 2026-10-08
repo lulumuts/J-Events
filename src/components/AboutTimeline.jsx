@@ -22,7 +22,11 @@ const timelineItems = {
     ),
   },
   myWay: {
-    period: '2021 - 2023',
+    period: (
+      <>
+        2021 - <span className="bm-about-timeline__period-as-written">Now</span>
+      </>
+    ),
     title: 'Building It My Way',
     body: (
       <>

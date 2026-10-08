@@ -2,7 +2,7 @@
  * Encodes the hero background video for the web (MP4 + WebM).
  * Run: npm run optimize:video
  *
- * Requires the source file at src/assets/CC_FINAL TRAIELR V2.mov
+ * Requires the source file at src/assets/jt5-hero-source.mp4
  */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
@@ -12,7 +12,7 @@ import ffmpegPath from 'ffmpeg-static';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
-const input = path.join(root, 'src/assets/CC_FINAL TRAIELR V2.mov');
+const input = path.join(root, 'src/assets/jt5-hero-source.mp4');
 const outDir = path.join(root, 'public/hero');
 
 const MAX_WIDTH = 1920;

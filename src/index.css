@@ -337,6 +337,7 @@ body {
   --bm-work-title-brown: color-mix(in srgb, var(--bm-work-toolbar-brown) 62%, #ed964c);
   --bm-work-card-max-w: clamp(16rem, 52vw, 26rem);
   --bm-work-card-height: clamp(13.5rem, 47vw, 20rem);
+  --bm-work-card-aspect: 7 / 5.75;
 }
 
 #work .bm-work {
@@ -488,8 +489,9 @@ body {
 
 #work .bm-work-grid {
   display: grid;
-  grid-template-columns: minmax(0, var(--bm-work-card-max-w));
-  justify-content: center;
+  grid-template-columns: minmax(0, 1fr);
+  justify-content: stretch;
+  width: 100%;
   gap: clamp(1rem, 2.5vw, 1.75rem);
   flex: 0 1 auto;
   min-height: auto;
@@ -501,7 +503,7 @@ body {
 
 @media (min-width: 520px) {
   #work .bm-work-grid {
-    grid-template-columns: repeat(2, minmax(0, var(--bm-work-card-max-w)));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -510,13 +512,13 @@ body {
 #work .bm-work-grid > .reveal-scale {
   flex: none;
   min-width: 0;
-  max-width: var(--bm-work-card-max-w);
+  max-width: none;
   width: 100%;
 }
 
 #work .bm-work-grid .bm-work-link {
-  height: var(--bm-work-card-height);
-  aspect-ratio: auto;
+  height: auto;
+  aspect-ratio: var(--bm-work-card-aspect);
 }
 
 #work .bm-work-grid::-webkit-scrollbar {
@@ -1306,6 +1308,15 @@ body {
   margin-bottom: clamp(1rem, 2.5vw, 1.75rem);
   padding-top: clamp(0.75rem, 1.75vh, 1.25rem);
   padding-bottom: clamp(1rem, 2.5vw, 1.75rem);
+  box-sizing: border-box;
+}
+
+/* Full width inside centered .bm-stats-wrap; min-width:0 so marquee track can shrink */
+.bm-client-logos {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  align-self: stretch;
   box-sizing: border-box;
 }
 
@@ -3500,6 +3511,10 @@ body {
   color: #722f0a;
 }
 
+.bm-about-timeline__period-as-written {
+  text-transform: none;
+}
+
 .bm-about-timeline__title {
   margin: 0 0 0.45rem;
   font-family: var(--bm-font-title);
@@ -3696,6 +3711,18 @@ body {
     box-sizing: border-box;
   }
 
+  .bm-about-timeline__above--left {
+    order: 1;
+  }
+
+  .bm-about-timeline__below--center {
+    order: 2;
+  }
+
+  .bm-about-timeline__above--right {
+    order: 3;
+  }
+
   .bm-about-timeline__above--left,
   .bm-about-timeline__above--right,
   .bm-about-timeline__below--center {
@@ -3739,6 +3766,10 @@ body {
   }
 
   .bm-about-timeline__below--center {
+    padding-bottom: 0;
+  }
+
+  .bm-about-timeline__above--right {
     padding-bottom: clamp(1rem, 2.5vh, 1.75rem);
   }
 }
@@ -4528,16 +4559,19 @@ body {
 }
 
 .bm:has(.bm-book-page) {
-  height: 100dvh;
-  max-height: 100dvh;
-  overflow: hidden;
+  min-height: 100dvh;
+  height: auto;
+  max-height: none;
+  overflow-x: clip;
+  overflow-y: auto;
 }
 
 .bm:has(.bm-book-page) .bm-main {
   flex: 1 1 auto;
   min-height: 0;
-  overflow: hidden;
-  padding-bottom: 0;
+  justify-content: center;
+  overflow: visible;
+  padding-bottom: var(--bm-page-margin-y);
   gap: 0;
 }
 
@@ -4545,10 +4579,13 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-height: 0;
-  max-height: 100%;
-  height: 100%;
+  width: var(--bm-container-width);
+  max-width: var(--bm-container-width);
+  max-height: min(88dvh, 50rem);
+  height: auto;
+  margin-inline: auto;
   overflow: hidden;
   padding-bottom: 0;
   box-sizing: border-box;
@@ -4564,7 +4601,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: clamp(2.5rem, 6vh, 3.5rem) 0 0;
+  padding: clamp(2.25rem, 5.5vh, 3.25rem) 0 0;
 }
 
 .bm-book-page .bm-contact-inner {
@@ -4575,7 +4612,7 @@ body {
   width: 100%;
   max-width: 100%;
   margin-inline: 0;
-  padding: clamp(1rem, 2.5vh, 1.5rem) 0 clamp(1.5rem, 3vh, 2rem);
+  padding: clamp(1rem, 2.5vh, 1.5rem) 0 clamp(1.35rem, 2.75vh, 1.85rem);
   box-sizing: border-box;
 }
 

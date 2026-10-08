@@ -93,4 +93,4 @@ async function removeEdgeBlackBackground(fileName, threshold = 22) {
 
 await removeBlackBackground('e3g-logo.png');
 await removeBlackBackground('discom-logo.png');
-await removeEdgeBlackBackground('julies-top-5-logo.png');
+await removeEdgeBlackBackground('top5.png');

@@ -10,7 +10,7 @@ export default function WelcomeIntro() {
             <p className="bm-intro-lead">
               Welcome to J Ideas &amp; Management, where I specialise in orchestrating
               unforgettable experiences and seamlessly executing projects through a unique
-              skillset providing a holistic, 360 view events &amp; projects.
+              skillset providing a holistic, 360 view on events &amp; projects.
             </p>
             <p className="bm-intro-body">
               In the realm of event management, I excel in curating impactful gatherings

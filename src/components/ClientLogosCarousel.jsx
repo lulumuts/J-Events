@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import nowYouKnowLogo from '../assets/logos/now-you-know-logo.png';
 import roundhouseLogo from '../assets/logos/roundhouse-logo.png';
 import constructionCfoLogo from '../assets/logos/construction-cfo-summit-logo.png';
-import juliesTop5Logo from '../assets/logos/julies-top-5-logo.png';
+import top5Logo from '../assets/logos/top5.png';
 import powerWithinYouLogo from '../assets/logos/power-within-you-logo.png';
 import mainStreetEventsLogo from '../assets/logos/main-street-events-logo.png';
 import e3gLogo from '../assets/logos/e3g-logo.png';
@@ -15,7 +15,7 @@ const MARQUEE_DURATION_MS = 32000;
 const LOGO_LOOP_COPIES = 2;
 
 const clientLogos = [
-  { src: juliesTop5Logo, alt: "Julie's Top 5 Live" },
+  { src: top5Logo, alt: "Julie's Top 5 Show" },
   { src: roundhouseLogo, alt: 'Roundhouse' },
   { src: constructionCfoLogo, alt: 'Construction CFO Summit' },
   { src: nowYouKnowLogo, alt: 'Now You Know' },

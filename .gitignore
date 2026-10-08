@@ -17,6 +17,7 @@ dist-ssr
 
 # Hero source reel — run npm run optimize:video → public/hero/
 src/assets/CC_FINAL TRAIELR V2.mov
+src/assets/jt5-hero-source.mp4
 
 # Editor directories and files
 .vscode/*
