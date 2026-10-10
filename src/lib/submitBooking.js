@@ -27,9 +27,9 @@ async function submitViaApi(form) {
   }
 }
 
-/** GitHub Pages is static, so bookings go through FormSubmit instead of /api/contact. */
-async function submitViaFormSubmit(form, contactEmail) {
-  const inbox = String(import.meta.env.VITE_BOOKING_INBOX || contactEmail || '').trim();
+/** GitHub Pages is static, so bookings go through FormSubmit to the local inbox. */
+async function submitViaFormSubmit(form) {
+  const inbox = String(import.meta.env.VITE_BOOKING_INBOX || '').trim();
   if (!inbox) {
     throw new Error('Unable to send. Please try again.');
   }
@@ -53,12 +53,12 @@ async function submitViaFormSubmit(form, contactEmail) {
   }
 }
 
-export async function submitBooking(form, contactEmail) {
+export async function submitBooking(form) {
   const pagesBuild = import.meta.env.VITE_GH_PAGES === 'true';
   const hasHostedApi = Boolean(import.meta.env.VITE_CONTACT_API_URL);
 
   if (pagesBuild && !hasHostedApi) {
-    await submitViaFormSubmit(form, contactEmail);
+    await submitViaFormSubmit(form);
     return;
   }
 

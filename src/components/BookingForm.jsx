@@ -47,7 +47,7 @@ export default function BookingForm() {
     setStatus('sending');
 
     try {
-      await submitBooking(form, content.siteSettings.contactEmail);
+      await submitBooking(form);
 
       setStatus('success');
       setForm(initialForm);
