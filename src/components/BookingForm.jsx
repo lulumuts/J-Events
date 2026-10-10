@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { submitBooking } from '../lib/submitBooking';
 
 const initialForm = {
   name: '',
@@ -9,8 +10,6 @@ const initialForm = {
   helpWith: [],
   eventDetails: [],
 };
-
-const CONTACT_API_URL = import.meta.env.VITE_CONTACT_API_URL || '/api/contact';
 
 export default function BookingForm() {
   const { content } = useSiteContent();
@@ -48,17 +47,7 @@ export default function BookingForm() {
     setStatus('sending');
 
     try {
-      const res = await fetch(CONTACT_API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        throw new Error(data.message || 'Something went wrong.');
-      }
+      await submitBooking(form, content.siteSettings.contactEmail);
 
       setStatus('success');
       setForm(initialForm);

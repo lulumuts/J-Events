@@ -32,9 +32,11 @@ jobs:
 
       - name: Build for GitHub Pages
         env:
-          # Optional until the site is on Vercel: repo Settings → Secrets → VITE_CONTACT_API_URL
-          # e.g. https://your-project.vercel.app/api/contact
+          VITE_GH_PAGES: 'true'
+          # Optional later, once the contact API is hosted. Until then the form uses FormSubmit.
           VITE_CONTACT_API_URL: ${{ secrets.VITE_CONTACT_API_URL }}
+          # Optional inbox override. Defaults to the contact email shown on the site.
+          VITE_BOOKING_INBOX: ${{ vars.VITE_BOOKING_INBOX }}
         run: npm run build:gh-pages
 
       - name: Upload Pages artifact
