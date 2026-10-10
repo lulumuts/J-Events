@@ -8,8 +8,12 @@ import FeaturedQuote from '../components/FeaturedQuote';
 import Contact from '../components/Contact';
 import Section from '../components/Section';
 import StackingSections from '../components/StackingSections';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 export default function Home() {
+  const { content } = useSiteContent();
+  const [quoteMid, quotePreWork, quotePostWork] = content.homePage.homeQuotes;
+
   return (
     <div className="bm">
       <StackingSections>
@@ -26,8 +30,8 @@ export default function Home() {
         </Section>
         <Section className="bm-featured-quote-section" id="mid-quote">
           <FeaturedQuote
-            text="Her gift of distilling & summarising information into useful action points is unmatched"
-            author="Julie Adenuga"
+            text={quoteMid?.text ?? ''}
+            author={quoteMid?.author ?? ''}
           />
         </Section>
         <Section className="bm-section--white" id="services">
@@ -35,8 +39,8 @@ export default function Home() {
         </Section>
         <Section className="bm-featured-quote-section" id="pre-work-quote">
           <FeaturedQuote
-            text="Jordan brings a clarity to event production that is a complete lifeline for me."
-            author="Elizabeth Corse, Founder, DisCom"
+            text={quotePreWork?.text ?? ''}
+            author={quotePreWork?.author ?? ''}
           />
         </Section>
         <Section className="bm-section--white" id="work">
@@ -44,8 +48,8 @@ export default function Home() {
         </Section>
         <Section className="bm-featured-quote-section" id="post-work-quote">
           <FeaturedQuote
-            text="She helped me turn around a 14 hour shoot, with a video, wardrobe and make up crew plus 12 talent bookings in less than three weeks."
-            author="Julie Adenuga"
+            text={quotePostWork?.text ?? ''}
+            author={quotePostWork?.author ?? ''}
           />
         </Section>
         <Section className="bm-section--white" id="contact">

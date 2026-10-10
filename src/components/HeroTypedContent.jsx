@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-const HEADLINE_1 = 'J Events';
-const HEADLINE_2 = '& Management';
-const PILLS = ['Event planner', 'Project manager', 'Content producer'];
+import { useSiteContent } from '../hooks/useSiteContent';
 
 const CHAR_MS = 42;
 const LINE_PAUSE_MS = 140;
@@ -11,6 +8,9 @@ const PILL_STAGGER_MS = 280;
 const PILL_DONE_PAUSE_MS = 180;
 
 export default function HeroTypedContent({ start, onTypingComplete }) {
+  const { content } = useSiteContent();
+  const { heroHeadline1, heroHeadline2, heroPills, heroCtaLabel } = content.homePage;
+
   const [line1Count, setLine1Count] = useState(0);
   const [line2Count, setLine2Count] = useState(0);
   const [visiblePillCount, setVisiblePillCount] = useState(0);
@@ -23,9 +23,9 @@ export default function HeroTypedContent({ start, onTypingComplete }) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) {
       queueMicrotask(() => {
-        setLine1Count(HEADLINE_1.length);
-        setLine2Count(HEADLINE_2.length);
-        setVisiblePillCount(PILLS.length);
+        setLine1Count(heroHeadline1.length);
+        setLine2Count(heroHeadline2.length);
+        setVisiblePillCount(heroPills.length);
         setPhase('done');
         setBtnsVisible(true);
       });
@@ -40,7 +40,7 @@ export default function HeroTypedContent({ start, onTypingComplete }) {
       setBtnsVisible(false);
     });
     return undefined;
-  }, [start, onTypingComplete]);
+  }, [start, onTypingComplete, heroHeadline1, heroHeadline2, heroPills.length]);
 
   useEffect(() => {
     if (phase !== 'done') return undefined;
@@ -49,55 +49,48 @@ export default function HeroTypedContent({ start, onTypingComplete }) {
   }, [phase, onTypingComplete]);
 
   useEffect(() => {
-    if (phase !== 'line1') return undefined;
+    if (phase === 'idle' || phase === 'done') return undefined;
 
-    if (line1Count >= HEADLINE_1.length) {
-      const pause = window.setTimeout(() => setPhase('line2'), LINE_PAUSE_MS);
-      return () => window.clearTimeout(pause);
+    if (phase === 'line1') {
+      if (line1Count >= heroHeadline1.length) {
+        const t = window.setTimeout(() => setPhase('line2'), LINE_PAUSE_MS);
+        return () => window.clearTimeout(t);
+      }
+      const t = window.setTimeout(() => setLine1Count((c) => c + 1), CHAR_MS);
+      return () => window.clearTimeout(t);
     }
 
-    const timer = window.setTimeout(() => {
-      setLine1Count((count) => count + 1);
-    }, CHAR_MS);
-
-    return () => window.clearTimeout(timer);
-  }, [phase, line1Count]);
-
-  useEffect(() => {
-    if (phase !== 'line2') return undefined;
-
-    if (line2Count >= HEADLINE_2.length) {
-      const pause = window.setTimeout(() => {
-        setVisiblePillCount(0);
-        setPhase('pills');
-      }, LINE_PAUSE_MS);
-      return () => window.clearTimeout(pause);
+    if (phase === 'line2') {
+      if (line2Count >= heroHeadline2.length) {
+        const t = window.setTimeout(() => setPhase('pills'), LINE_PAUSE_MS);
+        return () => window.clearTimeout(t);
+      }
+      const t = window.setTimeout(() => setLine2Count((c) => c + 1), CHAR_MS);
+      return () => window.clearTimeout(t);
     }
 
-    const timer = window.setTimeout(() => {
-      setLine2Count((count) => count + 1);
-    }, CHAR_MS);
-
-    return () => window.clearTimeout(timer);
-  }, [phase, line2Count]);
-
-  useEffect(() => {
-    if (phase !== 'pills') return undefined;
-
-    if (visiblePillCount >= PILLS.length) {
-      const pause = window.setTimeout(() => {
-        setPhase('done');
-        setBtnsVisible(true);
-      }, PILL_DONE_PAUSE_MS);
-      return () => window.clearTimeout(pause);
+    if (phase === 'pills') {
+      if (visiblePillCount >= heroPills.length) {
+        const t = window.setTimeout(() => {
+          setPhase('done');
+          setBtnsVisible(true);
+        }, PILL_DONE_PAUSE_MS);
+        return () => window.clearTimeout(t);
+      }
+      const t = window.setTimeout(() => setVisiblePillCount((c) => c + 1), PILL_STAGGER_MS);
+      return () => window.clearTimeout(t);
     }
 
-    const timer = window.setTimeout(() => {
-      setVisiblePillCount((count) => count + 1);
-    }, PILL_STAGGER_MS);
-
-    return () => window.clearTimeout(timer);
-  }, [phase, visiblePillCount]);
+    return undefined;
+  }, [
+    phase,
+    line1Count,
+    line2Count,
+    visiblePillCount,
+    heroHeadline1.length,
+    heroHeadline2.length,
+    heroPills.length,
+  ]);
 
   const showAccent = phase === 'line2' || phase === 'pills' || phase === 'done' || line2Count > 0;
   const showHeadlineCursor = phase === 'line1' || phase === 'line2';
@@ -107,10 +100,10 @@ export default function HeroTypedContent({ start, onTypingComplete }) {
     <>
       <div className="bm-hero-head">
         <h1 className="bm-h1">
-          {HEADLINE_1.slice(0, line1Count)}
+          {heroHeadline1.slice(0, line1Count)}
           {showAccent ? (
             <span className="accent">
-              {HEADLINE_2.slice(0, line2Count)}
+              {heroHeadline2.slice(0, line2Count)}
               {showHeadlineCursor && cursorInAccent ? (
                 <span className="bm-typewriter-cursor" aria-hidden="true">|</span>
               ) : null}
@@ -121,7 +114,7 @@ export default function HeroTypedContent({ start, onTypingComplete }) {
           ) : null}
         </h1>
         <div className="bm-hero-pills" aria-label="Roles">
-          {PILLS.map((label, index) => {
+          {heroPills.map((label, index) => {
             if (index >= visiblePillCount) return null;
 
             return (
@@ -133,7 +126,7 @@ export default function HeroTypedContent({ start, onTypingComplete }) {
         </div>
       </div>
       <div className={`bm-btns${btnsVisible ? ' bm-btns--visible' : ''}`}>
-        <Link to="/book" className="bm-btn1">Book a consultation</Link>
+        <Link to="/book" className="bm-btn1">{heroCtaLabel}</Link>
       </div>
     </>
   );

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { useSiteContent } from '../hooks/useSiteContent';
+import { getProjectLocation } from '../data/projects';
+import { projectImageSrc } from '../lib/sanity/projectImage';
 import WorkDetailModal from './WorkDetailModal';
 import WorkMetaFacts from './WorkMetaFacts';
-import { allFeaturedSlugs, categories, getProjectLocation, projects } from '../data/projects';
-import { assetUrl } from '../utils/assetUrl';
 
 const ArrowIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -43,12 +44,17 @@ function WorkCardDetails({ item }) {
 }
 
 export default function Portfolio() {
+  const { content } = useSiteContent();
+  const { workTitle, featuredProjectSlugs } = content.homePage;
+  const categories = content.siteSettings.workCategories;
+  const projects = content.projects;
+
   const [active, setActive] = useState('All');
   const [selectedProject, setSelectedProject] = useState(null);
   const gridRef = useRef(null);
   const filtered =
     active === 'All'
-      ? allFeaturedSlugs
+      ? featuredProjectSlugs
           .map((slug) => projects.find((p) => p.slug === slug))
           .filter(Boolean)
       : projects.filter((p) => p.category === active);
@@ -91,7 +97,7 @@ export default function Portfolio() {
       <div className="bm-work-inner">
         <div className="bm-work-toolbar">
           <div className="bm-sec-header">
-            <div className="bm-sec-title">Work</div>
+            <div className="bm-sec-title">{workTitle}</div>
           </div>
           <div className="bm-filter-row">
             {categories.map((cat) => (
@@ -107,11 +113,13 @@ export default function Portfolio() {
           </div>
         </div>
         <div className="bm-work-grid" ref={gridRef}>
-          {filtered.map((item) => (
+          {filtered.map((item) => {
+            const src = projectImageSrc(item);
+            return (
             <article key={item.slug} className="bm-work-item bm-work-link">
               <div className="bm-work-img">
-                {item.image ? (
-                  <img src={assetUrl(item.image)} alt={item.imageAlt ?? item.title} />
+                {src ? (
+                  <img src={src} alt={item.imageAlt ?? item.title} />
                 ) : null}
               </div>
               <div className="bm-work-info">
@@ -132,7 +140,8 @@ export default function Portfolio() {
                 <ArrowIcon />
               </button>
             </article>
-          ))}
+            );
+          })}
         </div>
       </div>
       {selectedProject ? (

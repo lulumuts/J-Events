@@ -1,20 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
-const HELP_OPTIONS = [
-  'Event Management',
-  'Project Management',
-  'Speaker Management',
-  'Event Consultancy',
-];
-
-const EVENT_DETAIL_OPTIONS = [
-  'Corporate Party',
-  'Conference/Summit',
-  'Retreat',
-  'Social Event',
-  'Just an Idea',
-];
+import { useSiteContent } from '../hooks/useSiteContent';
 
 const initialForm = {
   name: '',
@@ -27,6 +13,11 @@ const initialForm = {
 const CONTACT_API_URL = import.meta.env.VITE_CONTACT_API_URL || '/api/contact';
 
 export default function BookingForm() {
+  const { content } = useSiteContent();
+  const book = content.bookPage;
+  const helpOptions = book.helpOptions;
+  const eventDetailOptions = book.eventDetailOptions;
+
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -80,12 +71,21 @@ export default function BookingForm() {
   return (
     <div className="bm-contact bm-contact--form">
       <Link to="/#contact" className="bm-book-back">
-        ← Back
+        {book.backLinkLabel}
       </Link>
       <div className="bm-contact-inner">
+        {status === 'success' ? (
+          <div className="bm-book-thanks" role="status">
+            <h2 className="bm-book-thanks-title">Thank you for your message</h2>
+            <p className="bm-book-thanks-copy">
+              Your booking request was sent. I&apos;ll be in touch shortly.
+            </p>
+          </div>
+        ) : (
+        <>
         <div className="bm-book-intro">
           <div className="bm-sec-header">
-            <div className="bm-sec-title">Tell me about your event</div>
+            <div className="bm-sec-title">{book.pageTitle}</div>
           </div>
         </div>
 
@@ -93,36 +93,36 @@ export default function BookingForm() {
           <div className="bm-book-scroll">
           <form className="bm-booking-form" onSubmit={handleSubmit} noValidate>
               <fieldset className="bm-form-section" aria-labelledby="booking-your-details">
-                <h3 id="booking-your-details" className="bm-form-legend">Your Details</h3>
+                <h3 id="booking-your-details" className="bm-form-legend">{book.yourDetailsLegend}</h3>
                 <div className="bm-form-group">
-                  <label htmlFor="name">Name *</label>
+                  <label htmlFor="name">{book.nameLabel}</label>
                   <input
                     id="name"
                     type="text"
                     required
-                    placeholder="Your name"
+                    placeholder={book.namePlaceholder}
                     value={form.name}
                     onChange={update('name')}
                   />
                 </div>
                 <div className="bm-form-group">
-                  <label htmlFor="email">Email Address *</label>
+                  <label htmlFor="email">{book.emailLabel}</label>
                   <input
                     id="email"
                     type="email"
                     required
-                    placeholder="jane@email.com"
+                    placeholder={book.emailPlaceholder}
                     value={form.email}
                     onChange={update('email')}
                   />
                 </div>
                 <div className="bm-form-group">
-                  <label htmlFor="phone">Phone Number *</label>
+                  <label htmlFor="phone">{book.phoneLabel}</label>
                   <input
                     id="phone"
                     type="tel"
                     required
-                    placeholder="+254 700 000 000"
+                    placeholder={book.phonePlaceholder}
                     value={form.phone}
                     onChange={update('phone')}
                   />
@@ -130,9 +130,9 @@ export default function BookingForm() {
               </fieldset>
 
               <fieldset className="bm-form-section" aria-labelledby="booking-help">
-                <h3 id="booking-help" className="bm-form-legend">How can I help? *</h3>
+                <h3 id="booking-help" className="bm-form-legend">{book.helpLegend}</h3>
                 <div className="bm-checkbox-group">
-                  {HELP_OPTIONS.map((option) => (
+                  {helpOptions.map((option) => (
                     <label key={option} className="bm-checkbox">
                       <input
                         type="checkbox"
@@ -146,9 +146,9 @@ export default function BookingForm() {
               </fieldset>
 
               <fieldset className="bm-form-section" aria-labelledby="booking-event-details">
-                <h3 id="booking-event-details" className="bm-form-legend">Event Details *</h3>
+                <h3 id="booking-event-details" className="bm-form-legend">{book.eventLegend}</h3>
                 <div className="bm-checkbox-group">
-                  {EVENT_DETAIL_OPTIONS.map((option) => (
+                  {eventDetailOptions.map((option) => (
                     <label key={option} className="bm-checkbox">
                       <input
                         type="checkbox"
@@ -161,12 +161,6 @@ export default function BookingForm() {
                 </div>
               </fieldset>
 
-              {status === 'success' ? (
-                <p className="bm-form-success" role="status">
-                  Thank you — your booking request was sent. I&apos;ll be in touch within 24 hours.
-                </p>
-              ) : null}
-
               {status === 'error' ? (
                 <p className="bm-form-error" role="alert">{errorMessage}</p>
               ) : null}
@@ -176,15 +170,17 @@ export default function BookingForm() {
                 className="bm-submit"
                 disabled={status === 'sending'}
               >
-                {status === 'sending' ? 'Sending…' : 'Submit booking request'}
+                {status === 'sending' ? book.submittingLabel : book.submitLabel}
               </button>
 
               <p className="bm-contact-privacy">
-                Your details are kept private and never shared with third parties.
+                {book.privacyNotice}
               </p>
           </form>
           </div>
         </div>
+        </>
+        )}
       </div>
     </div>
   );

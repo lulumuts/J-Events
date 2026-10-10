@@ -3,13 +3,15 @@ import Reveal from '../components/Reveal';
 import Section from '../components/Section';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-import { projects } from '../data/projects';
-import { assetUrl } from '../utils/assetUrl';
 import WorkDetailContent from '../components/WorkDetailContent';
+import { useSiteContent } from '../hooks/useSiteContent';
+import { projectImageSrc } from '../lib/sanity/projectImage';
 
 export default function WorkDetail() {
   const { slug } = useParams();
-  const project = projects.find((p) => p.slug === slug);
+  const { content } = useSiteContent();
+  const project = content.projects.find((p) => p.slug === slug);
+  const imageSrc = project ? projectImageSrc(project) : '';
 
   if (!project) {
     return (
@@ -58,9 +60,9 @@ export default function WorkDetail() {
                 <Reveal type="scale" delay={1}>
                   <article className="bm-work-item bm-work-detail-card" aria-label={project.title}>
                     <div className="bm-work-img">
-                      {project.image ? (
+                      {imageSrc ? (
                         <img
-                          src={assetUrl(project.image)}
+                          src={imageSrc}
                           alt={project.imageAlt ?? project.title}
                         />
                       ) : (

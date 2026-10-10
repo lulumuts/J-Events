@@ -1,50 +1,17 @@
 import { Link } from 'react-router-dom';
+import { useSiteContent } from '../hooks/useSiteContent';
 import Reveal from './Reveal';
 
-const services = [
-  {
-    num: '01',
-    name: 'Event Management',
-    intro: 'Curating, planning & executing your event idea with:',
-    items: [
-      'Strategic & actionable planning',
-      'Logistical mastery',
-      'Team management',
-    ],
-  },
-  {
-    num: '02',
-    name: 'Project Management',
-    intro: 'Guiding your projects with your commitment & creativity and:',
-    items: [
-      'Creative project planning',
-      'Team support',
-      'Confident, clear communication',
-    ],
-  },
-  {
-    num: '03',
-    name: 'Speaker Management',
-    intro: 'Confidently guiding & preparing your speakers with:',
-    items: [
-      'Clear, consistent communication',
-      'Practical speaker briefings',
-      'A seamless on site experience',
-    ],
-  },
-  {
-    num: '04',
-    name: 'Event Consultancy',
-    intro: 'Planting the seed of your vision with a clear outline of what\'s possible with:',
-    items: [
-      'Insightful research',
-      'Creative action plans',
-      'The Journey to reality',
-    ],
-  },
-];
-
 export default function Services() {
+  const { content } = useSiteContent();
+  const {
+    servicesTitle,
+    servicesIntroLead,
+    servicesIntroRest,
+    servicesCtaLabel,
+    services,
+  } = content.homePage;
+
   const renderServiceName = (name) => {
     const parts = name.split(' ');
     if (parts.length < 2) return name;
@@ -63,18 +30,16 @@ export default function Services() {
           <div className="bm-services-copy">
             <Reveal>
               <div className="bm-sec-header">
-                <div className="bm-sec-title">Services</div>
+                <div className="bm-sec-title">{servicesTitle}</div>
                 <div className="bm-services-intro-block">
                   <p className="bm-services-intro">
-                    People are the real formula for success, and that&apos;s where I come in.
+                    {servicesIntroLead}
                     <span className="bm-services-intro-rest">
-                      With experience spanning event planning, content creation, and project
-                      management, I help turn your ideas into events that resonate, while keeping
-                      a genuine pulse on your community.
+                      {servicesIntroRest}
                     </span>
                   </p>
                   <div className="bm-services-cta">
-                    <Link className="bm-learn-more" to="/book">Book a consultation</Link>
+                    <Link className="bm-learn-more" to="/book">{servicesCtaLabel}</Link>
                   </div>
                 </div>
               </div>

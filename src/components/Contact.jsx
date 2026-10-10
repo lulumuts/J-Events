@@ -1,8 +1,18 @@
 import { Link } from 'react-router-dom';
+import { useSiteContent } from '../hooks/useSiteContent';
 import Reveal from './Reveal';
-import { assetUrl } from '../utils/assetUrl';
 
 export default function Contact() {
+  const { content } = useSiteContent();
+  const { siteSettings, homePage } = content;
+  const {
+    contactEmail,
+    contactPhoneDisplay,
+    contactPhoneTel,
+    footerLogoText,
+    footerCopyright,
+  } = siteSettings;
+
   return (
     <div className="bm-contact bm-contact--summary">
       <div className="bm-contact-inner">
@@ -10,8 +20,8 @@ export default function Contact() {
           <Reveal type="left">
             <div className="bm-contact-media">
               <img
-                src={assetUrl('about-jordan.png')}
-                alt="Jordan Graham at an event"
+                src={homePage.contactPhotoSrc}
+                alt={homePage.contactPhotoAlt}
                 className="bm-contact-media__photo"
               />
             </div>
@@ -20,10 +30,10 @@ export default function Contact() {
           <div className="bm-contact-content">
             <Reveal>
               <div className="bm-sec-header">
-                <div className="bm-sec-title">Contact</div>
+                <div className="bm-sec-title">{homePage.contactTitle}</div>
               </div>
               <p className="bm-contact-sub">
-                Reach out directly, or share your event details and I&apos;ll be in touch within 24 hours.
+                {homePage.contactSubcopy}
               </p>
             </Reveal>
 
@@ -33,18 +43,18 @@ export default function Contact() {
                   <div className="bm-work-detail-fact">
                     <dt>Email</dt>
                     <dd>
-                      <a href="mailto:hello@jevents.co.ke">hello@jevents.co.ke</a>
+                      <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
                     </dd>
                   </div>
                   <div className="bm-work-detail-fact">
                     <dt>Phone</dt>
                     <dd>
-                      <a href="tel:+254700000000">+254 700 000 000</a>
+                      <a href={`tel:${contactPhoneTel}`}>{contactPhoneDisplay}</a>
                     </dd>
                   </div>
                 </dl>
                 <Link to="/book" className="bm-contact-cta">
-                  Tell me about your event
+                  {homePage.contactCtaLabel}
                 </Link>
               </div>
             </Reveal>
@@ -54,8 +64,8 @@ export default function Contact() {
 
       <div className="bm-contact-footer">
         <div>
-          <div className="bm-contact-footer-logo">J EVENTS</div>
-          <div className="bm-contact-footer-copy">© 2025 · All rights reserved</div>
+          <div className="bm-contact-footer-logo">{footerLogoText}</div>
+          <div className="bm-contact-footer-copy">{footerCopyright}</div>
         </div>
       </div>
     </div>

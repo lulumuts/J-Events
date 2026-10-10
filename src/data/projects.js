@@ -322,7 +322,7 @@ export const projects = [
     title: 'Alma Amsterdam Catering',
     titleLines: ['Alma Amsterdam', 'Catering'],
     meta: 'Melting Shack · Amsterdam',
-    category: 'Melting Shack, Amsterdam',
+    category: 'Social',
     image: 'alma-amsterdam-catering.png',
     imageAlt: 'Catering at Alma Amsterdam, Melting Shack',
     description:

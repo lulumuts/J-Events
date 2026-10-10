@@ -1,4 +1,13 @@
+import { Resend } from 'resend';
+
 const REQUIRED = ['name', 'email', 'phone'];
+const TEST_FROM = 'Acme <onboarding@resend.dev>';
+
+function fromAddress() {
+  const configured = String(process.env.CONTACT_FROM_EMAIL || '').trim();
+  if (!configured || /yourdomain\.com/i.test(configured)) return TEST_FROM;
+  return configured;
+}
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -41,11 +50,10 @@ export async function sendBookingEmail(body) {
   validate(body);
 
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL;
-  const from = process.env.CONTACT_FROM_EMAIL;
+  const to = String(process.env.CONTACT_TO_EMAIL || 'delivered@resend.dev').trim();
 
-  if (!apiKey || !to || !from) {
-    throw new Error('Missing email configuration (RESEND_API_KEY, CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL)');
+  if (!apiKey || !to) {
+    throw new Error('Missing email configuration (RESEND_API_KEY, CONTACT_TO_EMAIL)');
   }
 
   const helpWith = Array.isArray(body.helpWith) ? body.helpWith.filter(Boolean) : [];
@@ -62,26 +70,19 @@ export async function sendBookingEmail(body) {
     </table>
   `;
 
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from,
-      to: [to],
-      reply_to: body.email,
-      subject: `New booking request — ${body.name}`,
-      html,
-    }),
+  const resend = new Resend(apiKey);
+  const { data, error } = await resend.emails.send({
+    from: fromAddress(),
+    to: [to],
+    replyTo: String(body.email).trim(),
+    subject: `New booking request — ${body.name}`,
+    html,
   });
 
-  if (!response.ok) {
-    const errText = await response.text();
-    console.error('Resend error:', response.status, errText);
+  if (error) {
+    console.error('Resend error:', error);
     throw new Error('RESEND_FAILED');
   }
 
-  return response.json();
+  return data;
 }

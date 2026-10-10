@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { assetUrl } from '../utils/assetUrl';
+import { useSiteContent } from '../hooks/useSiteContent';
 import HeroTypedContent from './HeroTypedContent';
-
-const HERO_MP4 = assetUrl('hero/hero.mp4');
-const HERO_WEBM = assetUrl('hero/hero.webm');
 const INTRO_MS = 6000;
 const VIDEO_READY_TIMEOUT_MS = 15000;
 
@@ -14,6 +11,10 @@ const supportsBackdropFilter = () => {
 };
 
 export default function Hero({ children }) {
+  const { content } = useSiteContent();
+  const heroMp4 = content.homePage.heroVideoMp4Url;
+  const heroWebm = content.homePage.heroVideoWebmUrl;
+
   const heroRef = useRef(null);
   const videoRef = useRef(null);
   const introStartedRef = useRef(false);
@@ -153,8 +154,8 @@ export default function Hero({ children }) {
           >
             {loadVideo ? (
               <>
-                <source src={HERO_MP4} type="video/mp4" />
-                <source src={HERO_WEBM} type="video/webm" />
+                <source src={heroMp4} type="video/mp4" />
+                <source src={heroWebm} type="video/webm" />
               </>
             ) : null}
           </video>

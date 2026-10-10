@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { getProjectLocation } from '../data/projects';
-import { assetUrl } from '../utils/assetUrl';
+import { projectImageSrc } from '../lib/sanity/projectImage';
 import WorkDetailContent from './WorkDetailContent';
 import WorkMetaFacts from './WorkMetaFacts';
 
@@ -44,6 +44,8 @@ export default function WorkDetailModal({ project, onClose }) {
 
   if (!project) return null;
 
+  const imageSrc = projectImageSrc(project);
+
   return createPortal(
     <div className="bm-work-modal">
       <button
@@ -73,9 +75,9 @@ export default function WorkDetailModal({ project, onClose }) {
           <div className="bm-work-modal__media-header">
             <ModalTitle project={project} />
           </div>
-          {project.image ? (
+          {imageSrc ? (
             <img
-              src={assetUrl(project.image)}
+              src={imageSrc}
               alt={project.imageAlt ?? project.title}
             />
           ) : (

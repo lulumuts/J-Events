@@ -1,56 +1,42 @@
-const timelineItems = {
-  spark: {
-    period: '2015 - 2017',
-    title: 'The Spark',
-    body: (
-      <>
-        While working at a publisher, <em>Research</em>, I fell in love with organising events
-        while putting together our annual User Groups Meetings.
-      </>
-    ),
-  },
-  momentum: {
-    period: '2017 - 2021',
-    title: 'Building Momentum',
-    body: (
-      <>
-        I moved onto an events agency, Maddox Events, to create the Women in Construction World
-        Series, which had editions in London, Amsterdam and San Francisco. I also supported the
-        largest tech events in Europe, the Women in Technology World Series which covered London,
-        Amsterdam, Glasgow, Boston, San Francisco.
-      </>
-    ),
-  },
-  myWay: {
-    period: (
-      <>
-        2021 - <span className="bm-about-timeline__period-as-written">Now</span>
-      </>
-    ),
-    title: 'Building It My Way',
-    body: (
-      <>
-        I took the plunge and dived into the freelancing world. This started with podcast
-        production, general support for business meetings and within a few months working on a
-        Virtual Summit with over 1000 attendees to kick off my events freelancer career… and
-        I&apos;ve never looked back.
-      </>
-    ),
-  },
-};
+import { useSiteContent } from '../hooks/useSiteContent';
+import { PortableText } from '@portabletext/react';
+import { portableTextComponents } from '../lib/sanity/portableTextComponents.js';
+
+function TimelinePeriod({ item }) {
+  if (item.periodPlain) {
+    return <p className="bm-about-timeline__period">{item.periodPlain}</p>;
+  }
+
+  return (
+    <p className="bm-about-timeline__period">
+      {item.periodBeforeHighlight}
+      {item.periodHighlight ? (
+        <span className="bm-about-timeline__period-as-written">{item.periodHighlight}</span>
+      ) : null}
+    </p>
+  );
+}
 
 function TimelineCopy({ item }) {
   return (
     <>
-      <p className="bm-about-timeline__period">{item.period}</p>
+      <TimelinePeriod item={item} />
       <h2 className="bm-about-timeline__title">{item.title}</h2>
-      <p className="bm-about-timeline__body">{item.body}</p>
+      <p className="bm-about-timeline__body">
+        <PortableText value={item.body} components={portableTextComponents} />
+      </p>
     </>
   );
 }
 
 export default function AboutTimeline() {
-  const { spark, momentum, myWay } = timelineItems;
+  const { content } = useSiteContent();
+  const byKey = Object.fromEntries(
+    content.aboutPage.timeline.map((item) => [item.key, item]),
+  );
+  const spark = byKey.spark ?? content.aboutPage.timeline[0];
+  const momentum = byKey.momentum ?? content.aboutPage.timeline[1];
+  const myWay = byKey.myWay ?? content.aboutPage.timeline[2];
 
   return (
     <div className="bm-about-timeline" aria-label="Career timeline">

@@ -4,9 +4,13 @@ import ClientLogosCarousel from '../components/ClientLogosCarousel';
 import FeaturedQuote from '../components/FeaturedQuote';
 import Reveal from '../components/Reveal';
 import Section from '../components/Section';
-import { assetUrl } from '../utils/assetUrl';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 export default function About() {
+  const { content } = useSiteContent();
+  const about = content.aboutPage;
+  const { clientLogosLabel } = content.homePage;
+
   return (
     <div className="bm bm-about-root">
       <main className="bm-main bm-about-main">
@@ -24,32 +28,24 @@ export default function About() {
               <div className="bm-about-layout">
                 <Reveal type="left">
                   <div className="bm-about-copy">
-                    <h1 className="bm-h1 bm-about-title">About</h1>
+                    <h1 className="bm-h1 bm-about-title">{about.pageTitle}</h1>
                     <div className="bm-about-intro-row">
                       <p className="bm-about-text bm-about-text--intro">
-                        I&apos;m Jordan, a freelance events and project manager based in Amsterdam,
-                        with over a decade of experience bringing live and virtual experiences to life.
-                        From intimate brand launches to flagship summits drawing thousands of registrants,
-                        I handle everything from the first concept call to the final curtain.
+                        {about.introParagraph}
                       </p>
                       <div className="bm-about-media">
                         <img
-                          src={assetUrl('about-jordan.png')}
-                          alt="Jordan Graham at an event"
+                          src={about.photoSrc}
+                          alt={about.photoAlt}
                           className="bm-about-media__photo"
                         />
                       </div>
                     </div>
-                    <p className="bm-about-text">
-                      My background spans conference production, community building, content strategy
-                      and speaker management, so when I come on board, I bring a joined-up view of
-                      what makes an event actually work. I care about the detail, the delegate
-                      experience, and whether the whole thing lands the way you imagined it.
-                    </p>
-                    <p className="bm-about-text">
-                      Whether you&apos;re launching something new or levelling up an existing event,
-                      I&apos;d love to hear about it.
-                    </p>
+                    {about.bodyParagraphs.map((paragraph) => (
+                      <p key={paragraph.slice(0, 24)} className="bm-about-text">
+                        {paragraph}
+                      </p>
+                    ))}
                   </div>
                 </Reveal>
 
@@ -57,8 +53,8 @@ export default function About() {
                   <div className="bm-about-quote-wrap">
                     <div className="bm-about-quote-section">
                       <FeaturedQuote
-                        text="Jordan brings a clarity to event production that is a complete lifeline for me."
-                        author="Elizabeth Corse, Founder, DisCom"
+                        text={about.quoteBeforeTimeline.text}
+                        author={about.quoteBeforeTimeline.author}
                       />
                     </div>
                   </div>
@@ -66,13 +62,13 @@ export default function About() {
                     <AboutTimeline />
                   </div>
                   <div className="bm-about-clients-row">
-                    <ClientLogosCarousel />
+                    <ClientLogosCarousel label={clientLogosLabel} />
                   </div>
                   <div className="bm-about-quote-wrap bm-about-quote-wrap--after-timeline">
                     <div className="bm-about-quote-section">
                       <FeaturedQuote
-                        text="She takes on all directions, gives great suggestions, is a fantastic mediator within small & larger teams and welcomes feedback with open arms. She. Is. The. Best."
-                        author="Julie Adenuga"
+                        text={about.quoteAfterTimeline.text}
+                        author={about.quoteAfterTimeline.author}
                       />
                     </div>
                   </div>

@@ -1,34 +1,8 @@
-import { useRef, useState } from 'react';
-import nowYouKnowLogo from '../assets/logos/now-you-know-logo.png';
-import roundhouseLogo from '../assets/logos/roundhouse-logo.png';
-import constructionCfoLogo from '../assets/logos/construction-cfo-summit-logo.png';
-import top5Logo from '../assets/logos/top5.png';
-import powerWithinYouLogo from '../assets/logos/power-within-you-logo.png';
-import mainStreetEventsLogo from '../assets/logos/main-street-events-logo.png';
-import e3gLogo from '../assets/logos/e3g-logo.png';
-import collectionsLogo from '../assets/logos/collections-logo.png';
-import discomLogo from '../assets/logos/discom-logo.png';
-import climateFoundersWeekLogo from '../assets/logos/climate-founders-week-logo.png';
-import braveLeadershipSummitLogo from '../assets/logos/brave-leadership-summit-logo.png';
+import { useEffect, useRef, useState } from 'react';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 const MARQUEE_DURATION_MS = 32000;
 const LOGO_LOOP_COPIES = 2;
-
-const clientLogos = [
-  { src: top5Logo, alt: "Julie's Top 5 Show" },
-  { src: roundhouseLogo, alt: 'Roundhouse' },
-  { src: constructionCfoLogo, alt: 'Construction CFO Summit' },
-  { src: nowYouKnowLogo, alt: 'Now You Know' },
-  { src: powerWithinYouLogo, alt: 'The Power Within You with Mamta Gera' },
-  { src: mainStreetEventsLogo, alt: 'Main Street Events Limited' },
-  { src: collectionsLogo, alt: 'Collections' },
-  { src: e3gLogo, alt: 'E3G' },
-  { src: discomLogo, alt: 'DisCom' },
-  { src: climateFoundersWeekLogo, alt: 'Climate Founders Week' },
-  { src: braveLeadershipSummitLogo, alt: 'BRAVE Leadership Summit' },
-];
-
-const carouselLogos = Array.from({ length: LOGO_LOOP_COPIES }, () => clientLogos).flat();
 
 const ArrowIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -42,14 +16,21 @@ const ArrowIcon = () => (
   </svg>
 );
 
-clientLogos.forEach(({ src }) => {
-  const img = new Image();
-  img.src = src;
-});
+export default function ClientLogosCarousel({ label, className = '' }) {
+  const { content } = useSiteContent();
+  const clientLogos = content.clientLogos;
+  const carouselLogos = Array.from({ length: LOGO_LOOP_COPIES }, () => clientLogos).flat();
 
-export default function ClientLogosCarousel({ label = 'Worked With', className = '' }) {
   const innerRef = useRef(null);
   const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    clientLogos.forEach(({ src }) => {
+      if (!src) return;
+      const img = new Image();
+      img.src = src;
+    });
+  }, [clientLogos]);
 
   const nudgeForward = () => {
     const inner = innerRef.current;
@@ -93,13 +74,15 @@ export default function ClientLogosCarousel({ label = 'Worked With', className =
                   key={`${logo.alt}-${index}`}
                   aria-hidden={index >= clientLogos.length}
                 >
-                  <img
-                    className="bm-stat-logo-img"
-                    src={logo.src}
-                    alt={index < clientLogos.length ? logo.alt : ''}
-                    loading="eager"
-                    decoding="async"
-                  />
+                  {logo.src ? (
+                    <img
+                      className="bm-stat-logo-img"
+                      src={logo.src}
+                      alt={index < clientLogos.length ? logo.alt : ''}
+                      loading="eager"
+                      decoding="async"
+                    />
+                  ) : null}
                 </div>
               ))}
             </div>
