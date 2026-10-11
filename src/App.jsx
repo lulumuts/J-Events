@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { SiteContentProvider } from './context/SiteContentProvider';
 import Home from './pages/Home';
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/studio/*" element={<Studio />} />
         </Routes>
       </BrowserRouter>
+      <Analytics />
     </SiteContentProvider>
   );
 }
