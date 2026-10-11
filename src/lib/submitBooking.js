@@ -1,66 +1,22 @@
-const contactApiUrl = import.meta.env.VITE_CONTACT_API_URL || '/api/contact';
+export async function submitBooking(form) {
+  const message = [
+    form.phone ? `Phone: ${form.phone}` : '',
+    form.helpWith?.length ? `How can I help: ${form.helpWith.join(', ')}` : '',
+    form.eventDetails?.length ? `Event details: ${form.eventDetails.join(', ')}` : '',
+  ].filter(Boolean).join('\n');
 
-function bookingPayload(form) {
-  return {
-    name: form.name,
-    email: form.email,
-    phone: form.phone,
-    _replyto: form.email,
-    _subject: `New booking request — ${form.name}`,
-    _template: 'table',
-    _captcha: 'false',
-    'How can I help': form.helpWith.join(', '),
-    'Event details': form.eventDetails.join(', '),
-  };
-}
-
-async function submitViaApi(form) {
-  const res = await fetch(contactApiUrl, {
+  const res = await fetch('/api/send', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(form),
+    body: JSON.stringify({
+      name: form.name,
+      email: form.email,
+      message,
+    }),
   });
 
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error(data.message || 'Something went wrong.');
+    throw new Error(data.error || 'Unable to send your message.');
   }
-}
-
-/** GitHub Pages is static, so bookings go through FormSubmit to the local inbox. */
-async function submitViaFormSubmit(form) {
-  const inbox = String(import.meta.env.VITE_BOOKING_INBOX || '').trim();
-  if (!inbox) {
-    throw new Error('Unable to send. Please try again.');
-  }
-
-  const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(inbox)}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify(bookingPayload(form)),
-  });
-
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok || String(data.success) !== 'true') {
-    const message = String(data.message || '');
-    if (/activation/i.test(message)) {
-      throw new Error(`Check ${inbox} for a FormSubmit activation email, then submit again.`);
-    }
-    throw new Error(message || 'Unable to send. Please try again.');
-  }
-}
-
-export async function submitBooking(form) {
-  const pagesBuild = import.meta.env.VITE_GH_PAGES === 'true';
-  const hasHostedApi = Boolean(import.meta.env.VITE_CONTACT_API_URL);
-
-  if (pagesBuild && !hasHostedApi) {
-    await submitViaFormSubmit(form);
-    return;
-  }
-
-  await submitViaApi(form);
 }

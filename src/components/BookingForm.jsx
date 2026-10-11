@@ -1,7 +1,71 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { submitBooking } from '../lib/submitBooking';
+import {
+  DEFAULT_PHONE_COUNTRY,
+  formatInternationalPhone,
+  phoneCountries,
+  phoneCountryByIso,
+} from '../data/phoneCountries';
+
+function PhoneCountrySelect({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef(null);
+  const selected = phoneCountryByIso(value) || phoneCountryByIso(DEFAULT_PHONE_COUNTRY);
+
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const onPointerDown = (event) => {
+      if (!rootRef.current?.contains(event.target)) setOpen(false);
+    };
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open]);
+
+  return (
+    <div className={`bm-phone-country${open ? ' is-open' : ''}`} ref={rootRef}>
+      <button
+        type="button"
+        className="bm-phone-country-button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label={`Country code ${selected.dial}`}
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        {selected.dial}
+      </button>
+      {open ? (
+        <ul className="bm-phone-country-list" role="listbox" aria-label="Country">
+          {phoneCountries.map((country) => (
+            <li key={country.iso}>
+              <button
+                type="button"
+                role="option"
+                aria-selected={country.iso === selected.iso}
+                onClick={() => {
+                  onChange(country.iso);
+                  setOpen(false);
+                }}
+              >
+                {country.name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
 
 const initialForm = {
   name: '',
@@ -18,6 +82,7 @@ export default function BookingForm() {
   const eventDetailOptions = book.eventDetailOptions;
 
   const [form, setForm] = useState(initialForm);
+  const [phoneCountry, setPhoneCountry] = useState(DEFAULT_PHONE_COUNTRY);
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -47,10 +112,14 @@ export default function BookingForm() {
     setStatus('sending');
 
     try {
-      await submitBooking(form);
+      await submitBooking({
+        ...form,
+        phone: formatInternationalPhone(phoneCountry, form.phone),
+      });
 
       setStatus('success');
       setForm(initialForm);
+      setPhoneCountry(DEFAULT_PHONE_COUNTRY);
     } catch (err) {
       setStatus('error');
       setErrorMessage(err.message || 'Unable to send. Please try again.');
@@ -107,14 +176,21 @@ export default function BookingForm() {
                 </div>
                 <div className="bm-form-group">
                   <label htmlFor="phone">{book.phoneLabel}</label>
-                  <input
-                    id="phone"
-                    type="tel"
-                    required
-                    placeholder={book.phonePlaceholder}
-                    value={form.phone}
-                    onChange={update('phone')}
-                  />
+                  <div className="bm-phone-row">
+                    <PhoneCountrySelect
+                      value={phoneCountry}
+                      onChange={setPhoneCountry}
+                    />
+                    <input
+                      id="phone"
+                      type="tel"
+                      required
+                      inputMode="tel"
+                      autoComplete="tel-national"
+                      value={form.phone}
+                      onChange={update('phone')}
+                    />
+                  </div>
                 </div>
               </fieldset>
 

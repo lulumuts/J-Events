@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import { POST as sendInquiry } from '../api/send.js';
 import { sendBookingEmail } from './sendBookingEmail.mjs';
 import { applyContactCors } from './contactCors.mjs';
 
@@ -15,6 +16,24 @@ app.use('/api/contact', (req, res, next) => {
     return;
   }
   next();
+});
+
+app.post('/api/send', async (req, res) => {
+  try {
+    const request = new Request('http://localhost/api/send', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(req.body ?? {}),
+    });
+    const response = await sendInquiry(request);
+    const text = await response.text();
+    const contentType = response.headers.get('content-type');
+    if (contentType) res.setHeader('content-type', contentType);
+    res.status(response.status).send(text);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Unable to send your message right now.' });
+  }
 });
 
 app.post('/api/contact', async (req, res) => {
