@@ -47,7 +47,7 @@
   --bm-dark-orange: #a04a11;
   --bm-dark-orange-rgb: 160, 74, 17;
   --bm-quote-brown: #3d1206;
-  --bm-hero-final-overlay-opacity: 0.95;
+  --bm-hero-final-overlay-opacity: 0.71;
   --bm-services-bg: var(--bm-btn-orange);
 
   /* Responsive type scale */
@@ -754,7 +754,7 @@ body {
 }
 
 .bm-hero-stage--intro-done.bm-hero-stage--no-backdrop .bm-hero-video-overlay {
-  background: rgba(var(--bm-dark-orange-rgb), 0.95);
+  background: rgba(var(--bm-dark-orange-rgb), var(--bm-hero-final-overlay-opacity));
 }
 
 .bm-hero-glass-card__frost {

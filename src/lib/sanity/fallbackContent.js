@@ -99,7 +99,7 @@ export function buildFallbackContent() {
       navCtaLabel: 'Book now',
       footerLogoText: 'J EVENTS',
       footerCopyright: '© 2025 · All rights reserved',
-      contactEmail: 'hello@mail.jgim.nl',
+      contactEmail: 'jordan@jgim.nl',
       contactPhoneDisplay: '+31651771249',
       contactPhoneTel: '+31651771249',
       workCategories: categories,
