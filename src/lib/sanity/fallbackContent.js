@@ -99,9 +99,9 @@ export function buildFallbackContent() {
       navCtaLabel: 'Book now',
       footerLogoText: 'J EVENTS',
       footerCopyright: '© 2025 · All rights reserved',
-      contactEmail: 'hello@jevents.co.ke',
-      contactPhoneDisplay: '+254 700 000 000',
-      contactPhoneTel: '+254700000000',
+      contactEmail: 'hello@mail.jgim.nl',
+      contactPhoneDisplay: '+31651771249',
+      contactPhoneTel: '+31651771249',
       workCategories: categories,
     },
     homePage: {
@@ -172,7 +172,7 @@ export function buildFallbackContent() {
       featuredProjectSlugs: allFeaturedSlugs,
       contactTitle: 'Contact',
       contactSubcopy:
-        'Reach out directly, or share your event details and I\'ll be in touch within 24 hours.',
+        'Reach out directly, or share your event details and I\'ll be in touch shortly.',
       contactPhotoSrc: assetUrl('about-jordan.png'),
       contactPhotoAlt: 'Jordan Graham at an event',
       contactCtaLabel: 'Tell me about your event',
@@ -245,7 +245,7 @@ export function buildFallbackContent() {
       submitLabel: 'Submit booking request',
       submittingLabel: 'Sending…',
       successMessage:
-        'Thank you — your booking request was sent. I\'ll be in touch within 24 hours.',
+        'Thank you — your booking request was sent. I\'ll be in touch shortly.',
       privacyNotice: 'Your details are kept private and never shared with third parties.',
     },
     projects: projects.map((p) => ({

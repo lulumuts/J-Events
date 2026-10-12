@@ -78,7 +78,7 @@ export async function POST(request) {
 
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
-    from: `${fromName} <forms@mail.jgim.nl>`,
+    from: `${fromName} <hello@mail.jgim.nl>`,
     to: [to],
     replyTo: trimmedEmail,
     subject: `New inquiry from ${fromName}`,
