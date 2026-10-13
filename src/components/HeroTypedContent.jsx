@@ -101,25 +101,33 @@ export default function HeroTypedContent({ start, onTypingComplete }) {
       <div className="bm-hero-head">
         <h1 className="bm-h1">
           {heroHeadline1.slice(0, line1Count)}
-          {showAccent ? (
+          {showHeadlineCursor && !cursorInAccent ? (
+            <span className="bm-typewriter-cursor" aria-hidden="true">|</span>
+          ) : null}
+          <span
+            className={`bm-h1-accent-slot${showAccent ? ' is-open' : ''}`}
+            aria-hidden={showAccent ? undefined : true}
+          >
             <span className="accent">
               {heroHeadline2.slice(0, line2Count)}
               {showHeadlineCursor && cursorInAccent ? (
                 <span className="bm-typewriter-cursor" aria-hidden="true">|</span>
               ) : null}
             </span>
-          ) : null}
-          {showHeadlineCursor && !cursorInAccent ? (
-            <span className="bm-typewriter-cursor" aria-hidden="true">|</span>
-          ) : null}
+          </span>
         </h1>
         <div className="bm-hero-pills" aria-label="Roles">
           {heroPills.map((label, index) => {
-            if (index >= visiblePillCount) return null;
-
+            const visible = index < visiblePillCount;
             return (
-              <span className="bm-pill bm-pill--fade-in" key={label}>
-                {label}
+              <span
+                className={`bm-pill-slot${visible ? ' is-open' : ''}`}
+                key={label}
+                aria-hidden={visible ? undefined : true}
+              >
+                <span className={`bm-pill${visible ? ' bm-pill--fade-in' : ''}`}>
+                  {label}
+                </span>
               </span>
             );
           })}

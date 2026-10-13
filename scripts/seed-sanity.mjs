@@ -223,7 +223,7 @@ async function seed() {
   await client.createOrReplace({
     _id: 'homePage',
     _type: 'homePage',
-    heroHeadline1: 'J Events',
+    heroHeadline1: 'J Ideas',
     heroHeadline2: '& Management',
     heroPills: ['Event planner', 'Project manager', 'Content producer'],
     heroCtaLabel: 'Book a consultation',

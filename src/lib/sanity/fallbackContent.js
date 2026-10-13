@@ -105,7 +105,7 @@ export function buildFallbackContent() {
       workCategories: categories,
     },
     homePage: {
-      heroHeadline1: 'J Events',
+      heroHeadline1: 'J Ideas',
       heroHeadline2: '& Management',
       heroPills: ['Event planner', 'Project manager', 'Content producer'],
       heroCtaLabel: 'Book a consultation',
